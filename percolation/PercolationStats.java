@@ -101,8 +101,10 @@ public class PercolationStats {
 		if (N <= 0 || T <= 0) {
 			throw new java.lang.IllegalArgumentException(); 
 		}
-		StdOut.printf ("Grid size: %d\n", N);
-		StdOut.printf ("Number of experiments: %d\n", T);
+		/*
+		 *StdOut.printf ("Grid size: %d\n", N);
+		 *StdOut.printf ("Number of experiments: %d\n", T);
+		 */
 		PercolationStats PS = new PercolationStats (N, T);
 		StdOut.printf ("mean                    = %f\n", PS.mean());
 		StdOut.printf ("stddev                  = %f\n", PS.stddev());
