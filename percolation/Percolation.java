@@ -1,57 +1,82 @@
 public class Percolation {
 	private enum SiteState {SS_EMPTY, SS_BLOCKED, SS_FILLED};
-	private SiteState[][] ssMatrix;
-	private int ssMatrixSize;
+	private SiteState[] ssArray;
+	private int N;
+	private QuickUnionUF qu;
 
-	public Percolation(int N)              // create N-by-N grid, with all sites blocked
+	public Percolation(int MatrixSide)              // create N-by-N grid, with all sites blocked
 	{
-		ssMatrixSize = N;
-		ssMatrix = new SiteState[N][N];
-		for (int i = 0; i < ssMatrix.length; ++i)
-			for (int j = 0; j < ssMatrix[i].length; ++j)
-				ssMatrix[i][j] = SiteState.SS_BLOCKED;
+		N = MatrixSide;
+		ssArray = new SiteState[N*N+2];
+		for (int i = 0; i < ssArray.length; ++i)
+				ssArray[i] = SiteState.SS_BLOCKED;
+		ssArray[N*N] = ssArray[N*N+1] = SiteState.SS_EMPTY;
+		qu = new QuickUnionUF(N*N+2);
 	}
+
 	public void open(int i, int j)         // open site (row i, column j) if it is not already
 	{
-		ssMatrix[i][j] = SiteState.SS_EMPTY;
+		ssArray[i*N+j] = SiteState.SS_EMPTY;
+		/* connect top or bottom site with a begin or end */
+		if (i == 0) {
+			qu.union(N*N,j); 
+		}
+		if (i == (N-1)) {
+			qu.union(N*N+1,N*N-N+j); 
+		}
+		/* check for neighbors */
+		/* up */
+		if (i > 0 && 
+				ssArray[(i-1)*N+j] == SiteState.SS_EMPTY) {
+			qu.union(i*N+j,(i-1)*N+j);
+		}
+		/* down */
+		if ( (i < (N-1)) && 
+				ssArray[(i+1)*N+j] == SiteState.SS_EMPTY) {
+			qu.union(i*N+j,(i+1)*N+j);
+		}
+		/* left */
+		if (j > 0 && 
+				ssArray[i*N+j-1] == SiteState.SS_EMPTY) {
+			qu.union(i*N+j,i*N+j-1);
+		}
+		/* rigth */
+		if ((j < (N-1)) && 
+				ssArray[i*N+j+1] == SiteState.SS_EMPTY) {
+			qu.union(i*N+j,i*N+j+1);
+		}
 	}
 
 	public boolean isOpen(int i, int j)    // is site (row i, column j) open?
 	{
-		return ssMatrix[i][j] == SiteState.SS_EMPTY;
+		return ssArray[i*N+j] == SiteState.SS_EMPTY;
 	}
 
 	public boolean isFull(int i, int j)    // is site (row i, column j) full?
 	{
-		return ssMatrix[i][j] == SiteState.SS_FILLED;
-	}
-
-	private int percolate_to (int i, int j)
-	{
-		ssMatrix[i][j] = SiteState.SS_FILLED;
-		if (i == ssMatrixSize-1) return i;
-		/* left side */
-		if ((j > 0) && (ssMatrix[i][j-1] == SiteState.SS_EMPTY)) {
-			return percolate_to (i, j-1);
-		}
-		/* rigth side */
-		if ((j < (ssMatrixSize-2)) && (ssMatrix[i][j+1] == SiteState.SS_EMPTY)) {
-			return percolate_to (i, j+1);
-		}
-		/* bottom side */
-		if ((i < (ssMatrixSize-1)) && (ssMatrix[i+1][j] == SiteState.SS_EMPTY)) {
-			return percolate_to (i+1, j);
-		}
-		return i;
+		return ssArray[i*N+j] == SiteState.SS_FILLED;
 	}
 
 	public void printout () {
-		for (int i = 0; i < ssMatrix.length;++i) {
-			for (int j = 0; j < ssMatrix[i].length;++j) {
-				StdOut.printf("%s", ssMatrix[i][j] == SiteState.SS_EMPTY ? "." :
-													  ssMatrix[i][j] == SiteState.SS_BLOCKED ? "#" :
-													  ssMatrix[i][j] == SiteState.SS_FILLED ? "O" :
-													  "*");
+		for (int i = 0; i < N;++i) {
+			for (int j = 0; j < N;++j) {
+				if (qu.connected(i*N+j,N*N)) {
+					StdOut.printf("%s", ssArray[i*N+j] == SiteState.SS_EMPTY ? "O" :
+							ssArray[i*N+j] == SiteState.SS_BLOCKED ? "#" :
+							ssArray[i*N+j] == SiteState.SS_FILLED ? "." :
+							"*");
+				} else
+				if (qu.connected(i*N+j,N*N+1)) {
+					StdOut.printf("%s", ssArray[i*N+j] == SiteState.SS_EMPTY ? "." :
+							ssArray[i*N+j] == SiteState.SS_BLOCKED ? "#" :
+							ssArray[i*N+j] == SiteState.SS_FILLED ? "O" :
+							"*");
+				} else {
+					StdOut.printf("%s", ssArray[i*N+j] == SiteState.SS_EMPTY ? "." :
+							ssArray[i*N+j] == SiteState.SS_BLOCKED ? "#" :
+							ssArray[i*N+j] == SiteState.SS_FILLED ? "O" :
+							"*");
+				}
 			}
 			StdOut.printf("\n");
 		}
@@ -60,32 +85,8 @@ public class Percolation {
 
 	public boolean percolates()            // does the system percolate?
 	{
-		/* fill in first row empty sites */
-		for (int i = 0; i < ssMatrix.length; ++i) {
-			for (int j = 0; j < ssMatrix.length; ++j) {
-				if (i == 0 && isOpen(0,j)) {
-					ssMatrix[0][j] = SiteState.SS_FILLED;
-				} else 
-				if (i > 0 && isFull(i,j)) {
-					ssMatrix[i][j] = SiteState.SS_EMPTY;
-				}
-			}
-		}
-		/* begin flood */
-		int flood_level = 0;
-		for (int i_filled = 0; i_filled < ssMatrix.length; ++i_filled) {
-			if (isFull(0,i_filled)) {
-				if (ssMatrixSize-1 == (flood_level = percolate_to (0, i_filled))) {
-					break;
-				}
-			}
-		}
 		//printout();
-		if (flood_level == (ssMatrixSize - 1)) {
-			return true;
-		} else {
-			return false;
-		}
+		return qu.connected(N*N,N*N+1);
 	}
 }
 

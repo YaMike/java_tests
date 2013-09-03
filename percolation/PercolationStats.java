@@ -23,7 +23,9 @@ public class PercolationStats {
 	};
 	private class pairs {
 		private ArrayList<pair> p;
+		private int taken;
 		public pairs (int n) {
+			taken = 0;
 			p = new ArrayList<pair>();
 			int row = 0, col = 0, count = n*n;
 			for (int i = 0; i < count; ++i) {
@@ -39,10 +41,14 @@ public class PercolationStats {
 			int i_elem = StdRandom.uniform(0,p.size()-1);
 			pair lp = new pair(p.get(i_elem));
 			p.remove(i_elem);
+			taken++;
 			return lp;
 		}
 		public int count () {
 			return p.size();
+		}
+		public int el_taken () {
+			return taken;
 		}
 	};
 
@@ -61,7 +67,7 @@ public class PercolationStats {
 				//StdOut.printf("Open %d %d\n", lp.row, lp.col);
 				p.open(lp.row,lp.col);
 			}
-			test_cases[t] = ps.count();
+			test_cases[t] = ((double)(ps.el_taken())/(N*N));
 		}
 	}
 
@@ -92,8 +98,6 @@ public class PercolationStats {
 				System.exit(1);
 			}
 		}
-		//N = StdIn.readInt ();
-		//T = StdIn.readInt ();
 		if (N <= 0 || T <= 0) {
 			throw new java.lang.IllegalArgumentException(); 
 		}
