@@ -51,14 +51,14 @@ public class PercolationStats {
 		pair lp;
 
 		int row, col;
-		Percolation p = new Percolation(N);
 		test_cases = new double[T];
 		for (int t = 0; t < T; ++t) {
 			pairs ps = new pairs (N);
+			Percolation p = new Percolation(N);
 			while (!p.percolates()) {
 				if (ps.count() <= 1) break;
 				lp = ps.take_one ();
-				StdOut.printf("Open: %d-%d\n",lp.row, lp.col);
+				//StdOut.printf("Open %d %d\n", lp.row, lp.col);
 				p.open(lp.row,lp.col);
 			}
 			test_cases[t] = ps.count();
@@ -83,15 +83,22 @@ public class PercolationStats {
 	}
 	public static void main(String[] args)   // test client, described below
 	{
-		N = StdIn.readInt ();
-		T = StdIn.readInt ();
+		if (args.length > 0) {
+			try {
+				N = Integer.parseInt (args[0]);
+				T = Integer.parseInt (args[1]);
+			} catch (NumberFormatException e) {
+				System.err.println ("Argument "+" must be an integer.");
+				System.exit(1);
+			}
+		}
+		//N = StdIn.readInt ();
+		//T = StdIn.readInt ();
 		if (N <= 0 || T <= 0) {
 			throw new java.lang.IllegalArgumentException(); 
 		}
-		/*
-		 *StdOut.printf ("Grid size: %d\n", N);
-		 *StdOut.printf ("Number of experiments: %d\n", T);
-		 */
+		StdOut.printf ("Grid size: %d\n", N);
+		StdOut.printf ("Number of experiments: %d\n", T);
 		PercolationStats PS = new PercolationStats (N, T);
 		StdOut.printf ("mean                    = %f\n", PS.mean());
 		StdOut.printf ("stddev                  = %f\n", PS.stddev());

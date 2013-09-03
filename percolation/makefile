@@ -22,7 +22,7 @@ clean:
 	@rm -rf libs *.class
 
 run:
-	@echo 4 1 | java PercolationStats
+	@echo 4 5 | java PercolationStats
 
 zip:
 	@zip $(ZARCH) Percolation.java PercolationStats.java
