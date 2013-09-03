@@ -19,10 +19,10 @@ clean:
 	@echo "Removing $(OBJS), $(ZARCH)..."
 	@rm -f $(OBJS) $(ZARCH)
 	@$(foreach ext_class,$(EXTCLASSES),echo "Remove $(ext_class).[java,class]"; rm -f $(ext_class).java;)
-	@rm -rf libs
+	@rm -rf libs *.class
 
 run:
-	@echo 10 50 | java PercolationStats
+	@echo 4 1 | java PercolationStats
 
 zip:
 	@zip $(ZARCH) Percolation.java PercolationStats.java

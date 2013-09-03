@@ -53,10 +53,12 @@ public class PercolationStats {
 		int row, col;
 		Percolation p = new Percolation(N);
 		test_cases = new double[T];
-		for (int t = T; t < T; ++t) {
+		for (int t = 0; t < T; ++t) {
 			pairs ps = new pairs (N);
 			while (!p.percolates()) {
+				if (ps.count() <= 1) break;
 				lp = ps.take_one ();
+				StdOut.printf("Open: %d-%d\n",lp.row, lp.col);
 				p.open(lp.row,lp.col);
 			}
 			test_cases[t] = ps.count();
@@ -90,7 +92,6 @@ public class PercolationStats {
 		 *StdOut.printf ("Grid size: %d\n", N);
 		 *StdOut.printf ("Number of experiments: %d\n", T);
 		 */
-
 		PercolationStats PS = new PercolationStats (N, T);
 		StdOut.printf ("mean                    = %f\n", PS.mean());
 		StdOut.printf ("stddev                  = %f\n", PS.stddev());
