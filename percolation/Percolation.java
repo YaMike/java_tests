@@ -6,6 +6,9 @@ public class Percolation {
 
   public Percolation(int size)              // create N-by-N grid, with all sites blocked
   {
+		if (size <= 0) {
+			throw new java.lang.IllegalArgumentException();
+		}
     N = size;
     ssArray = new SiteState[N*N+2];
     for (int i = 0; i < ssArray.length; ++i)
@@ -17,54 +20,54 @@ public class Percolation {
 
   public void open(int i, int j)         // open site (row i, column j) if it is not already
   {
-    if (i < 0 || j < 0 || i >= N || j >= N) {
+    if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException();
     }
-    ssArray[i*N+j] = SiteState.SS_EMPTY;
+    ssArray[(i-1)*N+j-1] = SiteState.SS_EMPTY;
     /* connect top or bottom site with a begin or end */
-    if (i == 0) {
-      qu.union(N*N, j); 
+    if (i == 1) {
+      qu.union(N*N, j-1); 
     }
-    if (i == (N-1)) {
-      qu.union(N*N+1, N*N-N+j); 
+    if (i == N) {
+      qu.union(N*N+1, N*N-N+j-1); 
     }
     /* check for neighbors */
     /* up */
-    if (i > 0 
-        && ssArray[(i-1)*N+j] == SiteState.SS_EMPTY) {
-      qu.union(i*N+j, (i-1)*N+j);
+    if (i > 1
+        && ssArray[(i-2)*N+j-1] == SiteState.SS_EMPTY) {
+      qu.union((i-1)*N+j-1, (i-2)*N+j-1);
     }
     /* down */
-    if ((i < (N-1)) 
-      && ssArray[(i+1)*N+j] == SiteState.SS_EMPTY) {
-      qu.union(i*N+j, (i+1)*N+j);
+    if (i < N
+      && ssArray[i*N+j-1] == SiteState.SS_EMPTY) {
+      qu.union((i-1)*N+j-1, (i)*N+j-1);
     }
     /* left */
-    if (j > 0 
-      && ssArray[i*N+j-1] == SiteState.SS_EMPTY) {
-      qu.union(i*N+j, i*N+j-1);
+    if (j > 1
+      && ssArray[(i-1)*N+j-2] == SiteState.SS_EMPTY) {
+      qu.union((i-1)*N+j-1, (i-1)*N+j-2);
     }
     /* rigth */
-    if ((j < (N-1))
-      && ssArray[i*N+j+1] == SiteState.SS_EMPTY) {
-      qu.union(i*N+j, i*N+j+1);
+    if (j < N
+      && ssArray[(i-1)*N+j] == SiteState.SS_EMPTY) {
+      qu.union((i-1)*N+j-1, (i-1)*N+j);
     }
   }
 
   public boolean isOpen(int i, int j)    // is site (row i, column j) open?
   {
-    if (i < 0 || j < 0 || i >= N || j >= N) {
+    if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException();
     }
-    return ssArray[i*N+j] == SiteState.SS_EMPTY;
+    return ssArray[i*N+j-1] == SiteState.SS_EMPTY;
   }
 
   public boolean isFull(int i, int j)    // is site (row i, column j) full?
   {
-    if (i < 0 || j < 0 || i >= N || j >= N) {
+    if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException();
     }
-    return ssArray[i*N+j] == SiteState.SS_FILLED;
+    return ssArray[i*N+j-1] == SiteState.SS_FILLED;
   }
 
 /*

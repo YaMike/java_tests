@@ -27,13 +27,13 @@ public class PercolationStats {
     public pairs (int n) {
       taken = 0;
       p = new ArrayList<pair>();
-      int row = 0, col = 0, count = n*n;
+      int row = 1, col = 1, count = n*n;
       for (int i = 0; i < count; ++i) {
         p.add(new pair(row,col));
         col++;
-        if (col % n == 0) {
+        if ((col-1) % n == 0) {
           row++;
-          col = 0;
+          col = 1;
         }
       }
     }
@@ -64,7 +64,6 @@ public class PercolationStats {
       while (!p.percolates()) {
         if (ps.count() <= 1) break;
         lp = ps.take_one ();
-        //StdOut.printf("Open %d %d\n", lp.row, lp.col);
         p.open(lp.row,lp.col);
       }
       test_cases[t] = ((double)(ps.el_taken())/(N*N));
