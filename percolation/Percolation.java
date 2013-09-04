@@ -3,7 +3,7 @@ public class Percolation {
   private SiteState[] ssArray;
   private int N;
   private WeightedQuickUnionUF qu;
-  static private final boolean PercDebug = false;
+  static private final boolean PercDebug = true;
 
   public Percolation(int size)              // create N-by-N grid, with all sites blocked
   {
@@ -29,7 +29,7 @@ public class Percolation {
     int i = NewPos/N, j = NewPos % N;
     ssArray[NewPos] = SiteState.SS_FILLED;
     if (PercDebug) {
-      StdOut.printf("infill %d %d\n", i, j);
+      StdOut.printf("infill %d %d 32\n", i, j);
       printOut();
     }
     qu.union(OldPos, NewPos);
@@ -61,12 +61,12 @@ public class Percolation {
 	UpdPos = NewPos;
 	ssArray[CurPos] = SiteState.SS_FILLED;
 	if (PercDebug) {
-	  StdOut.printf("infill %d %d\n", CurPos/N, CurPos % N);
+	  StdOut.printf("infill %d %d 64\n", CurPos/N, CurPos % N);
 	  printOut();
 	}
 	ssArray[NewPos] = SiteState.SS_FILLED;
 	if (PercDebug) {
-	  StdOut.printf("infill %d %d\n", NewPos/N, NewPos % N);
+	  StdOut.printf("infill %d %d 69\n", NewPos/N, NewPos % N);
 	  printOut();
 	}
       } else {
@@ -86,7 +86,7 @@ public class Percolation {
     int[] UpdPos = {-1, -1, -1, -1};
     ssArray[CurPos] = SiteState.SS_EMPTY;
     if (PercDebug) {
-      StdOut.printf("Open %d %d\n", i-1, j-1);
+      StdOut.printf("Open %d %d 89\n", CurPos/N, CurPos % N);
       printOut();
     }
     /* connect top or bottom site with a begin or end */
@@ -94,7 +94,7 @@ public class Percolation {
       qu.union(N*N, CurPos);
       ssArray[CurPos] = SiteState.SS_FILLED;
       if (PercDebug) {
-	StdOut.printf("set %d %d\n", CurPos/N, CurPos % N);
+	StdOut.printf("set %d %d 97\n", CurPos/N, CurPos % N);
 	printOut();
       }
     }
@@ -130,7 +130,7 @@ public class Percolation {
     if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException(str);
     }
-    return ssArray[(i-1)*N+j-1] == SiteState.SS_EMPTY;
+    return qu.connected(N*N+1, (i-1)*N+j-1);
   }
 
   public boolean isFull(int i, int j)    // is site (row i, column j) full?
@@ -139,7 +139,7 @@ public class Percolation {
     if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException(str);
     }
-    return ssArray[(i-1)*N+j-1] == SiteState.SS_FILLED;
+    return qu.connected(N*N, (i-1)*N+j-1);
   }
 
   private void printOut() {
