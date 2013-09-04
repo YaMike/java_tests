@@ -2,7 +2,7 @@ public class Percolation {
   private enum SiteState { SS_EMPTY, SS_BLOCKED, SS_FILLED };
   private SiteState[] ssArray;
   private int N;
-  private QuickUnionUF qu;
+  private WeightedQuickUnionUF qu;
 
   public Percolation(int size)              // create N-by-N grid, with all sites blocked
   {
@@ -12,7 +12,7 @@ public class Percolation {
         ssArray[i] = SiteState.SS_BLOCKED;
     ssArray[N*N] = SiteState.SS_EMPTY;
     ssArray[N*N+1] = SiteState.SS_EMPTY;
-    qu = new QuickUnionUF(N*N+2);
+    qu = new WeightedQuickUnionUF(N*N+2);
   }
 
   public void open(int i, int j)         // open site (row i, column j) if it is not already
