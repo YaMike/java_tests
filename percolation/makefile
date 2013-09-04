@@ -1,4 +1,4 @@
-SRC=$(wildcard *.java)
+SRC=$(wildcard Percolation*.java)
 OBJS=$(subst .java,.class,$(SRC))
 TARG=$(subst .class,,$(OBJS))
 CC=javac
@@ -44,4 +44,4 @@ run:
 	@java PercolationStats 2 100000
 
 zip:
-	@zip $(ZARCH) Percolation.java PercolationStats.java
+	@zip ~/$(ZARCH) Percolation.java PercolationStats.java
