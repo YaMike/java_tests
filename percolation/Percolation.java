@@ -3,7 +3,7 @@ public class Percolation {
   private SiteState[] ssArray;
   private int N;
   private WeightedQuickUnionUF qu;
-  private static final boolean debug = false;
+  static private final boolean PercDebug = false;
 
   public Percolation(int size)              // create N-by-N grid, with all sites blocked
   {
@@ -20,60 +20,60 @@ public class Percolation {
     qu = new WeightedQuickUnionUF(N*N+2);
   }
 
-  private void infill_state(int old_pos, int new_pos) {
-    if ((new_pos < 0)
-	|| (new_pos > (N*N-1))
-	|| (ssArray[new_pos] != SiteState.SS_EMPTY)) {
+  private void infillState(int OldPos, int NewPos) {
+    if ((NewPos < 0)
+	|| (NewPos > (N*N-1))
+	|| (ssArray[NewPos] != SiteState.SS_EMPTY)) {
       return;
     }
-    int i = new_pos/N, j = new_pos%N;
-    ssArray[new_pos] = SiteState.SS_FILLED;
-    if (debug) {
+    int i = NewPos/N, j = NewPos % N;
+    ssArray[NewPos] = SiteState.SS_FILLED;
+    if (PercDebug) {
       StdOut.printf("infill %d %d\n", i, j);
-      printout();
+      printOut();
     }
-    qu.union(old_pos, new_pos);
+    qu.union(OldPos, NewPos);
     /* check for neighbors states */
     /* up */
     if (i > 0) {
-      infill_state(old_pos, new_pos-N);
+      infillState(OldPos, NewPos-N);
     }
     /* down */
     if (i < (N-1)) {
-      infill_state(old_pos, new_pos+N);
+      infillState(OldPos, NewPos+N);
     }
     /* left */
     if (j > 0) {
-      infill_state(old_pos, new_pos-1);
+      infillState(OldPos, NewPos-1);
     }
     /* right */
     if (j < (N-1)) {
-      infill_state(old_pos, new_pos+1);
+      infillState(OldPos, NewPos+1);
     }
   }
 
-  private int check_neighbor(int cur_pos, int new_pos) {
-    int upd_pos = -1;
-    if (ssArray[new_pos] != SiteState.SS_BLOCKED) {
-      qu.union(cur_pos, new_pos);
-      if (ssArray[new_pos] == SiteState.SS_FILLED
-	  || ssArray[cur_pos] == SiteState.SS_FILLED) {
-	upd_pos = new_pos;
-	ssArray[cur_pos] = SiteState.SS_FILLED;
-	if (debug) {
-	  StdOut.printf("infill %d %d\n", cur_pos/N, cur_pos%N);
-	  printout();
+  private int checkNeighbor(int CurPos, int NewPos) {
+    int UpdPos = -1;
+    if (ssArray[NewPos] != SiteState.SS_BLOCKED) {
+      qu.union(CurPos, NewPos);
+      if (ssArray[NewPos] == SiteState.SS_FILLED
+	  || ssArray[CurPos] == SiteState.SS_FILLED) {
+	UpdPos = NewPos;
+	ssArray[CurPos] = SiteState.SS_FILLED;
+	if (PercDebug) {
+	  StdOut.printf("infill %d %d\n", CurPos/N, CurPos % N);
+	  printOut();
 	}
-	ssArray[new_pos] = SiteState.SS_FILLED;
-	if (debug) {
-	  StdOut.printf("infill %d %d\n", new_pos/N, new_pos%N);
-	  printout();
+	ssArray[NewPos] = SiteState.SS_FILLED;
+	if (PercDebug) {
+	  StdOut.printf("infill %d %d\n", NewPos/N, NewPos % N);
+	  printOut();
 	}
       } else {
-	ssArray[new_pos] = SiteState.SS_EMPTY;
+	ssArray[NewPos] = SiteState.SS_EMPTY;
       }
     }
-    return upd_pos;
+    return UpdPos;
   }
 
   public void open(int i, int j)         // open site (row i, column j) if it is not already
@@ -82,45 +82,45 @@ public class Percolation {
     if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException(str);
     }
-    int cur_pos = (i-1)*N+j-1;
-    int upd_pos[] = {-1,-1,-1,-1};
-    ssArray[cur_pos] = SiteState.SS_EMPTY;
-    if (debug) {
+    int CurPos = (i-1)*N+j-1;
+    int[] UpdPos = {-1, -1, -1, -1};
+    ssArray[CurPos] = SiteState.SS_EMPTY;
+    if (PercDebug) {
       StdOut.printf("Open %d %d\n", i-1, j-1);
-      printout();
+      printOut();
     }
     /* connect top or bottom site with a begin or end */
     if (i == 1) {
-      qu.union(N*N, cur_pos);
-      ssArray[cur_pos] = SiteState.SS_FILLED;
-      if (debug) {
-	StdOut.printf("set %d %d\n", cur_pos/N, cur_pos%N);
-	printout();
+      qu.union(N*N, CurPos);
+      ssArray[CurPos] = SiteState.SS_FILLED;
+      if (PercDebug) {
+	StdOut.printf("set %d %d\n", CurPos/N, CurPos % N);
+	printOut();
       }
     }
     if (i == N) {
-      qu.union(N*N+1, cur_pos); 
+      qu.union(N*N+1, CurPos); 
     }
     /* check for neighbors */
     /* up */
     if (i > 1) {
-      upd_pos[0] = check_neighbor(cur_pos, cur_pos-N);
+      UpdPos[0] = checkNeighbor(CurPos, CurPos-N);
     }
     /* down */
     if (i < N) {
-      upd_pos[1] = check_neighbor(cur_pos, cur_pos+N);
+      UpdPos[1] = checkNeighbor(CurPos, CurPos+N);
     }
     /* left */
     if (j > 1) {
-      upd_pos[2] = check_neighbor(cur_pos, cur_pos-1);
+      UpdPos[2] = checkNeighbor(CurPos, CurPos-1);
     }
     /* rigth */
     if (j < N) {
-      upd_pos[3] = check_neighbor(cur_pos, cur_pos+1);
+      UpdPos[3] = checkNeighbor(CurPos, CurPos+1);
     }
     /* recursively update site states if necessary */
     for (int k = 0; k < 4; ++k) {
-      infill_state(cur_pos, upd_pos[k]);
+      infillState(CurPos, UpdPos[k]);
     }
   }
 
@@ -142,7 +142,7 @@ public class Percolation {
     return ssArray[(i-1)*N+j-1] == SiteState.SS_FILLED;
   }
 
-  private void printout() {
+  private void printOut() {
     for (int i = 0; i < N; ++i) {
       for (int j = 0; j < N; ++j) {
 	switch (ssArray[i*N+j]) {
