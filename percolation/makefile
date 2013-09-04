@@ -4,7 +4,7 @@ TARG=$(subst .class,,$(OBJS))
 CC=javac
 RUN=java
 ZARCH=percolation.zip
-EXTCLASSES=StdIn StdOut StdRandom StdStats StdDraw StdArrayIO QuickUnionUF WeightedQuickUnionUF
+EXTCLASSES=StdIn StdOut StdRandom StdStats StdDraw StdArrayIO QuickUnionUF WeightedQuickUnionUF In
 
 all: $(OBJS)
 
