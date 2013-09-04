@@ -98,7 +98,8 @@ public class PercolationStats {
       }
     }
     if (N <= 0 || T <= 0) {
-      throw new java.lang.IllegalArgumentException(); 
+      String str = "Error at main: N="+N+", T="+T+"\n";
+      throw new java.lang.IllegalArgumentException(str); 
     }
     /*
      *StdOut.printf ("Grid size: %d\n", N);
