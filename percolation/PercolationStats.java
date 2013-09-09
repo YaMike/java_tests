@@ -58,6 +58,11 @@ public class PercolationStats {
 
     int row, col;
     test_cases = new double[T];
+		/*
+		 *for (int t = 0; t < T; ++t) {
+		 *  test_cases[t] = 0.0;
+		 *}
+		 */
     for (int t = 0; t < T; ++t) {
       pairs ps = new pairs (N);
       Percolation p = new Percolation(N);
