@@ -54,8 +54,11 @@ public class PercolationStats {
 
   public PercolationStats(int N, int T)    // perform T independent computational experiments on an N-by-N grid
   {
+    if (N <= 0 || T <= 0) {
+      String str = "Error at main: N="+N+", T="+T+"\n";
+      throw new java.lang.IllegalArgumentException(str); 
+    }
     pair lp;
-
     int row, col;
     test_cases = new double[T];
 		/*
@@ -102,14 +105,6 @@ public class PercolationStats {
         System.exit(1);
       }
     }
-    if (N <= 0 || T <= 0) {
-      String str = "Error at main: N="+N+", T="+T+"\n";
-      throw new java.lang.IllegalArgumentException(str); 
-    }
-    /*
-     *StdOut.printf ("Grid size: %d\n", N);
-     *StdOut.printf ("Number of experiments: %d\n", T);
-     */
     PercolationStats PS = new PercolationStats (N, T);
     StdOut.printf ("mean                    = %f\n", PS.mean());
     StdOut.printf ("stddev                  = %f\n", PS.stddev());
