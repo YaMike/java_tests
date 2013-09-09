@@ -2,6 +2,9 @@ public class Percolation {
   private boolean[] opened;
   private int N;
   private WeightedQuickUnionUF qu;
+  private boolean percolates;
+  private int[] idx;
+  private int idx_cnt;
 
   public Percolation(int size)              // create N-by-N grid, with all sites blocked
   {
@@ -10,9 +13,12 @@ public class Percolation {
       throw new java.lang.IllegalArgumentException(str);
     }
     N = size;
-    qu = new WeightedQuickUnionUF(N*N+2);
-    opened = new boolean[N*N+1];
-    for (int i = 0; i < N; i++) {
+    qu = new WeightedQuickUnionUF(N*N+1);
+    opened = new boolean[N*N];
+    idx = new int[N];
+    idx_cnt = 0;
+    percolates = false;
+    for (int i = 0; i < opened.length; i++) {
       opened[i] = false;
     }
   }
@@ -28,11 +34,9 @@ public class Percolation {
     if (i == 1) {
       qu.union(N*N,CurPos);
     }
-
     if (i == N) {
-      qu.union(N*N+1,CurPos);
+      idx[idx_cnt++] = N*(N-1)+j-1;
     }
-    
     if (i > 1 && opened[CurPos-N]) {
       qu.union(CurPos,CurPos-N);
     }
@@ -44,6 +48,15 @@ public class Percolation {
     }
     if (j < (N) && opened[CurPos+1]) {
       qu.union(CurPos,CurPos+1);
+    }
+    if (!percolates && (idx_cnt > 0)) {
+      int top = qu.find(N*N);
+      for (int k = 0; k < idx_cnt; ++k) {
+	if (qu.find(idx[k]) == top) {
+	  percolates = true;
+	  break;
+	}
+      }
     }
   }
 
@@ -67,7 +80,7 @@ public class Percolation {
 
   public boolean percolates()            // does the system percolate?
   {
-    return qu.connected(N*N,N*N+1);
+    return percolates;
   }
 }
 
