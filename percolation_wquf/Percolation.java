@@ -1,9 +1,8 @@
 public class Percolation {
-  private enum SiteState { SS_EMPTY, SS_BLOCKED, SS_FILLED };
   private int N;
-  private SiteState[] ssArray;
-  private boolean percolates;
-  private WeightedQuickUnionUF qu;
+  private WeightedQuickUnionUF qu_connected;
+  private WeightedQuickUnionUF qu_full;
+  private boolean[] opened;
 
   public Percolation(int size)              // create N-by-N grid, with all sites blocked
   {
@@ -12,42 +11,10 @@ public class Percolation {
       throw new java.lang.IllegalArgumentException(str);
     }
     N = size;
-    ssArray = new SiteState[N*N];
-    for (int i = 0; i < ssArray.length; i++) {
-      ssArray[i] = SiteState.SS_BLOCKED;
-    }
-    qu = new WeightedQuickUnionUF(N);
-    percolates = false;
-  }
-
-  private void infillState(int NewPos) {
-    int i = NewPos/N, j = NewPos % N;
-    if (   (NewPos < 0) 
-        || (NewPos > (N*N-1)) 
-        || ssArray[NewPos] != SiteState.SS_EMPTY) {
-      return;
-    }
-    ssArray[NewPos] = SiteState.SS_FILLED;
-    if (i == (N-1)) {
-      percolates = true;
-    }
-    /* check for neighbors states */
-    /* up */
-    if (i > 0) {
-      infillState (NewPos-N);
-    }
-    /* down */
-    if (i < (N-1)) {
-      infillState (NewPos+N);
-    }
-    /* left */
-    if (j > 0) {
-      infillState (NewPos-1);
-    }
-    /* right */
-    if (j < (N-1)) {
-      infillState (NewPos+1);
-    }
+    qu_connected = new WeightedQuickUnionUF(N*N+2);
+    qu_full = new WeightedQuickUnionUF(N*N+1);
+    opened = new boolean[N*N];
+    for (int i = 0; i < opened.length; opened[i++] = false);
   }
 
   public void open(int i_ext, int j_ext)         // open site (row i, column j) if it is not already
@@ -57,39 +24,31 @@ public class Percolation {
       throw new java.lang.IndexOutOfBoundsException(str);
     }
     int i = i_ext-1, j = j_ext - 1, CurPos = N*i+j;
-    boolean runFilling = false;
+    opened[CurPos] = true;
 
     if (i == 0) {
-      ssArray[CurPos] = SiteState.SS_FILLED;
-      if (N == 1) percolates = true;
-      runFilling = true;
-      qu.union(0,i);
-    } else {
-      ssArray[CurPos] = SiteState.SS_EMPTY;
+      qu_connected.union(N*N,CurPos);
+      qu_full.union(N*N,CurPos);
+    } else
+    if (i == N-1) {
+      qu_connected.union(N*N+1,CurPos);
     }
-    int[] UpdPos = {-1, -1, -1, -1};
-    if (i > 0)     UpdPos[0] = CurPos-N;
-    if (i < (N-1)) UpdPos[1] = CurPos+N;
-    if (j > 0)     UpdPos[2] = CurPos-1;
-    if (j < (N-1)) UpdPos[3] = CurPos+1;
-    /* check if there any filled site around */
-    for (int k = 0; k < 4; ++k) {
-      if (UpdPos[k] >= 0 && ssArray[UpdPos[k]] == SiteState.SS_FILLED) {
-        ssArray[CurPos]= SiteState.SS_FILLED;
-        if (i == (N-1)) {
-          percolates = true;
-        }
-        runFilling = true;
-        break;
-      }
+    int Pos = 0;
+    if (i > 0 && opened[Pos=CurPos-N]) {
+      qu_connected.union(CurPos, Pos);
+      qu_full.union(CurPos, Pos);
     }
-    /* recursively update site states if necessary */
-    if (runFilling) {
-      for (int k = 0; k < 4; ++k) {
-        if (UpdPos[k] > 0) {
-          infillState(UpdPos[k]);
-        }
-      }
+    if (i < (N-1) && opened[Pos=CurPos+N]) {
+      qu_connected.union(CurPos, Pos);
+      qu_full.union(CurPos, Pos);
+    }
+    if (j > 0 && opened[Pos=CurPos-1]) {
+      qu_connected.union(CurPos, Pos);
+      qu_full.union(CurPos, Pos);
+    }
+    if (j < (N-1) && opened[Pos=CurPos+1]) {
+      qu_connected.union(CurPos, Pos);
+      qu_full.union(CurPos, Pos);
     }
   }
 
@@ -99,7 +58,7 @@ public class Percolation {
     if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException(str);
     }
-    return ssArray[(i-1)*N+j-1] != SiteState.SS_BLOCKED;
+    return opened[(i-1)*N+j-1];
   }
 
   public boolean isFull(int i, int j)    // is site (row i, column j) full?
@@ -108,12 +67,12 @@ public class Percolation {
     if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException(str);
     }
-    return ssArray[(i-1)*N+j-1] == SiteState.SS_FILLED;
+    return qu_full.connected(N*N,(i-1)*N+j-1);
   }
 
   public boolean percolates()            // does the system percolate?
   {
-    return percolates;
+    return qu_connected.connected(N*N,N*N+1);
   }
 }
 
