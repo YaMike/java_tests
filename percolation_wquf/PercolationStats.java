@@ -2,8 +2,6 @@ import java.util.ArrayList;
 
 public class PercolationStats {
   private double[] test_cases;
-  private double mean;
-  private double stddev;
   static private int T;
   static private int N;
 
@@ -61,11 +59,9 @@ public class PercolationStats {
     pair lp;
     int row, col;
     test_cases = new double[T];
-		/*
-		 *for (int t = 0; t < T; ++t) {
-		 *  test_cases[t] = 0.0;
-		 *}
-		 */
+    for (int t = 0; t < T; ++t) {
+      test_cases[t] = 0.0;
+    }
     for (int t = 0; t < T; ++t) {
       pairs ps = new pairs (N);
       Percolation p = new Percolation(N);
@@ -80,19 +76,19 @@ public class PercolationStats {
 
   public double mean()                     // sample mean of percolation threshold
   {
-    return mean = StdStats.mean(test_cases);
+    return StdStats.mean(test_cases);
   }
   public double stddev()                   // sample standard deviation of percolation threshold
   {
-    return stddev = StdStats.stddev(test_cases);
+    return StdStats.stddev(test_cases);
   }
   public double confidenceLo()             // returns lower bound of the 95% confidence interval
   {
-    return (StdStats.mean(test_cases) - 1.96*stddev/Math.sqrt(T));
+    return (StdStats.mean(test_cases) - 1.96*StdStats.stddev(test_cases)/Math.sqrt(T));
   }
   public double confidenceHi()             // returns upper bound of the 95% confidence interval
   {
-    return (StdStats.mean(test_cases) + 1.96*stddev/Math.sqrt(T));
+    return (StdStats.mean(test_cases) + 1.96*StdStats.stddev(test_cases)/Math.sqrt(T));
   }
   public static void main(String[] args)   // test client, described below
   {
