@@ -15,13 +15,17 @@ all: $(OBJS)
 	@$(CC) -Xlint $<
 
 .PHONY:
+
+tests:
+	@unzip -f percolation-testing.zip
+
 clean:
 	@echo "Removing $(OBJS), $(ZARCH)..."
 	@rm -f $(OBJS) $(ZARCH)
 	@$(foreach ext_class,$(EXTCLASSES),echo "Remove $(ext_class).[java,class]"; rm -f $(ext_class).java;)
-	@rm -rf libs *.class
+	@rm -rf libs *.class percolation
 
-run:
+run: tests
 	@echo "****************************************************************"
 	@echo -ne "Must be:\n"\
 		"mean                    = 0.5929934999999997\n"\
