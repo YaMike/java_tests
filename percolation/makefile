@@ -17,7 +17,8 @@ all: $(OBJS)
 .PHONY:
 
 tests:
-	@unzip -f percolation-testing.zip
+	@echo "Unzipping percolation-testing.zip"
+	@rm -rf percolation; unzip percolation-testing.zip
 
 clean:
 	@echo "Removing $(OBJS), $(ZARCH)..."
