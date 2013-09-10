@@ -1,94 +1,103 @@
 import java.util.ArrayList;
 
 public class PercolationStats {
-  private double[] test_cases;
-  static private int T;
-  static private int N;
+  private static int T;
+  private static int N;
+  private double[] testCases;
+  private double mean;
+  private double stddev;
+  private double confLo;
+  private double confHi;
 
-  private int empty_count = 0;
-
-  private class pair {
-    public int row;
-    public int col;
-    public pair (int r, int c) {
+  private class Pair {
+    private int row;
+    private int col;
+    public int getRow() { return row;}
+    public int getCol() { return col;}
+    public Pair(int r, int c) {
       row = r;
       col = c;
     }
-    public pair (pair p) {
+    public Pair(Pair p) {
       row = p.row;
       col = p.col;
     }
   };
-  private class pairs {
-    private ArrayList<pair> p;
+  private class Pairs {
+    private ArrayList<Pair> p;
     private int taken;
-    public pairs (int n) {
+    public Pairs(int n) {
       taken = 0;
-      p = new ArrayList<pair>();
+      p = new ArrayList<Pair>();
       int row = 1, col = 1, count = n*n;
-      for (int i = 0; i < count; ++i) {
-        p.add(new pair(row,col));
+      for(int i = 0; i < count; ++i) {
+        p.add(new Pair(row, col));
         col++;
-        if ((col-1) % n == 0) {
+        if((col-1) % n == 0) {
           row++;
           col = 1;
         }
       }
     }
-    public pair take_one () {
-      int i_elem = StdRandom.uniform(0,p.size()-1);
-      pair lp = new pair(p.get(i_elem));
-      p.remove(i_elem);
+    public Pair takeOne() {
+      int iElem = StdRandom.uniform(0, p.size()-1);
+      Pair lp = new Pair(p.get(iElem));
+      p.remove(iElem);
       taken++;
       return lp;
     }
-    public int count () {
+    public int count() {
       return p.size();
     }
-    public int el_taken () {
+    public int elTaken() {
       return taken;
     }
   };
 
   public PercolationStats(int N, int T)    // perform T independent computational experiments on an N-by-N grid
   {
-    if (N <= 0 || T <= 0) {
+    if(N <= 0 || T <= 0) {
       String str = "Error at main: N="+N+", T="+T+"\n";
       throw new java.lang.IllegalArgumentException(str); 
     }
-    pair lp;
+    Pair lp;
     int row, col;
-    test_cases = new double[T];
-    for (int t = 0; t < T; ++t) {
-      test_cases[t] = 0.0;
+    testCases = new double[T];
+    for(int t = 0; t < T; ++t) {
+      testCases[t] = 0.0;
     }
-    for (int t = 0; t < T; ++t) {
-      pairs ps = new pairs (N);
+    for(int t = 0; t < T; ++t) {
+      Pairs ps = new Pairs(N);
       Percolation p = new Percolation(N);
-      while (!p.percolates()) {
-        if (ps.count() <= 1) break;
-        lp = ps.take_one ();
-        p.open(lp.row,lp.col);
+      while(!p.percolates()) {
+        if(ps.count() <= 1) break;
+        lp = ps.takeOne();
+        p.open(lp.getRow(),lp.getCol());
       }
-      test_cases[t] = ((double)(ps.el_taken())/(N*N));
+      testCases[t]=((double)ps.elTaken())/(N*N);
+      StdOut.printf("%f\n", testCases[t]);
     }
+    mean=StdStats.mean(testCases);
+    stddev=StdStats.stddev(testCases);
+    confLo=mean-1.96*stddev*1/Math.sqrt(T);
+    confHi=mean-1.96*stddev*1/Math.sqrt(T);
   }
 
   public double mean()                     // sample mean of percolation threshold
   {
-    return StdStats.mean(test_cases);
+    return mean;
   }
   public double stddev()                   // sample standard deviation of percolation threshold
   {
-    return StdStats.stddev(test_cases);
+    return stddev;
   }
   public double confidenceLo()             // returns lower bound of the 95% confidence interval
   {
-    return (StdStats.mean(test_cases) - 1.96*StdStats.stddev(test_cases)/Math.sqrt(T));
+    return confLo;
   }
   public double confidenceHi()             // returns upper bound of the 95% confidence interval
   {
-    return (StdStats.mean(test_cases) + 1.96*StdStats.stddev(test_cases)/Math.sqrt(T));
+    return confHi;
   }
   public static void main(String[] args)   // test client, described below
   {

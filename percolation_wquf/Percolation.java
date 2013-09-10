@@ -13,15 +13,15 @@ public class Percolation {
     quConnected = new WeightedQuickUnionUF(N*N+2);
     quFull = new WeightedQuickUnionUF(N*N+1);
     opened = new boolean[N*N];
-    for (int i = 0; i < opened.length; opened[i++] = false);
+    for (int i = 0; i < opened.length; i++) opened[i] = false;
   }
 
-  public void open(int i_ext, int j_ext)         // open site (row i, column j) if it is not already
+  public void open(int iExt, int jExt)         // open site (row i, column j) if it is not already
   {
-    if (i_ext < 1 || j_ext < 1 || i_ext > N || j_ext > N) {
+    if (iExt < 1 || jExt < 1 || iExt > N || jExt > N) {
       throw new java.lang.IndexOutOfBoundsException();
     }
-    int i = i_ext-1, j = j_ext - 1, curPos = N*i+j;
+    int i = iExt-1, j = jExt - 1, curPos = N*i+j;
     opened[curPos] = true;
 
     if (i == 0) {
@@ -67,12 +67,12 @@ public class Percolation {
     if (i < 1 || j < 1 || i > N || j > N) {
       throw new java.lang.IndexOutOfBoundsException();
     }
-    return quFull.connected(N*N,(i-1)*N+j-1);
+    return quFull.connected(N*N, (i-1)*N+j-1);
   }
 
   public boolean percolates()            // does the system percolate?
   {
-    return quConnected.connected(N*N,N*N+1);
+    return quConnected.connected(N*N, N*N+1);
   }
 }
 
