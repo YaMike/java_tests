@@ -16,19 +16,18 @@ all: $(OBJS)
 
 .PHONY:
 
-tests:
-	@rm -rf percolation; unzip percolation-testing.zip
-
 clean:
 	@echo "Removing $(OBJS), $(ZARCH)..."
 	@rm -f $(OBJS) $(ZARCH)
 	@$(foreach ext_class,$(EXTCLASSES),echo "Remove $(ext_class).[java,class]"; rm -f $(ext_class).java;)
 	@rm -rf libs *.class percolation
 
-run: tests
+run:
 	@echo "****************************************************************"
 	@echo "Here a place for unit tests"
 	@echo "****************************************************************"
 
 zip:
+	@echo "Creating *.zip archive..."
 	@zip ~/$(ZARCH) Deque.java RandomizedQueue.java Subset.java
+	@echo "~/$(ZARCH) has been created."
