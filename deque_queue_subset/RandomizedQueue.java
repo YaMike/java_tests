@@ -1,31 +1,46 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.UnsupportedOperationException;
+
 class RandomizedQueue<Item> implements Iterable<Item> {
-  public RandomizedQueue()           // construct an empty randomized queue
-  {
+  private int N;
+  private Item[] items;
+
+  public RandomizedQueue() {         // construct an empty randomized queue
   }
 
-  public boolean isEmpty()           // is the queue empty?
-  {
+  public boolean isEmpty() {         // is the queue empty?
+    return N == 0;
   }
 
-  public int size()                  // return the number of items on the queue
-  {
+  public int size() {                // return the number of items on the queue
+    return N;
   }
 
-  public void enqueue(Item item)     // add the item
-  {
+  public void enqueue(Item item) {   // add the item
   }
 
-  public Item dequeue()              // delete and return a random item
-  {
+  public Item dequeue() {            // delete and return a random item
   }
 
-  public Item sample()               // return (but do not delete) a random item
-  {
+  public Item sample() {             // return (but do not delete) a random item
+    StdRandom.uniform()
   }
 
   public Iterator<Item> iterator()   // return an independent iterator over items in random order
   {
     return new RandomIterator();
+  }
+
+  private class RandomIterator implements Iterator<Item> {
+    private int N;
+    public boolean hasNext() { return N > 0; }
+    public void remove() { throw new UnsupportedOperationException(); }
+    public Item next() {
+      if (!hasNext()) throw new NoSuchElementException;
+      Item item = 
+
+    }
   }
 
   public static void main(String[] args) {
