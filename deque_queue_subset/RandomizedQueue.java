@@ -1,12 +1,23 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.UnsupportedOperationException;
+import java.lang.UnsupportedOperationException;
 
 class RandomizedQueue<Item> implements Iterable<Item> {
   private int N;
   private Item[] items;
 
+  private void resize(int max) {
+    Item[] temp = (Item[]) new Object[max];
+    for (int i = 0; i < N; i++) {
+      temp[i] = items[i];
+    }
+    items = temp;
+    N = max;
+  }
+
   public RandomizedQueue() {         // construct an empty randomized queue
+    items = (Item[]) new Object[2];
+    N = 0;
   }
 
   public boolean isEmpty() {         // is the queue empty?
@@ -18,13 +29,20 @@ class RandomizedQueue<Item> implements Iterable<Item> {
   }
 
   public void enqueue(Item item) {   // add the item
+    if (N == items.length) resize(items.length*2);
+    items[N++] = item;
   }
 
   public Item dequeue() {            // delete and return a random item
+    if (isEmpty()) throw new NoSuchElementException();
+    int i = StdRandom.uniform(N);
+    Item it = items[i];
+    items[i] = items[N--];
+    return it;
   }
 
   public Item sample() {             // return (but do not delete) a random item
-    StdRandom.uniform()
+    return items[StdRandom.uniform(N)];
   }
 
   public Iterator<Item> iterator()   // return an independent iterator over items in random order
@@ -33,13 +51,21 @@ class RandomizedQueue<Item> implements Iterable<Item> {
   }
 
   private class RandomIterator implements Iterator<Item> {
-    private int N;
+    private int[] elNums;
+    private int elNumsCnt;
+    public RandomIterator() {
+      elNumsCnt = N;
+      for (int i = 0; i < elNumsCnt; i++) {
+        elNums[i] = i;
+      }
+    }
     public boolean hasNext() { return N > 0; }
     public void remove() { throw new UnsupportedOperationException(); }
     public Item next() {
-      if (!hasNext()) throw new NoSuchElementException;
-      Item item = 
-
+      if (!hasNext()) throw new NoSuchElementException();
+      int idx = StdRandom.uniform(elNumsCnt);
+      elNums[idx] = elNums[elNumsCnt--];
+      return items[idx];
     }
   }
 
