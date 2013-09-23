@@ -1,6 +1,7 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.lang.UnsupportedOperationException;
+import java.lang.NullPointerException;
 
 class RandomizedQueue<Item> implements Iterable<Item> {
   private int N;
@@ -29,6 +30,7 @@ class RandomizedQueue<Item> implements Iterable<Item> {
   }
 
   public void enqueue(Item item) {   // add the item
+    if (item == null)  throw new NullPointerException();
     if (N == items.length) resize(2*items.length);
     items[N] = item;
     N++;
@@ -43,6 +45,7 @@ class RandomizedQueue<Item> implements Iterable<Item> {
   }
 
   public Item sample() {             // return (but do not delete) a random item
+    if (isEmpty()) throw new NoSuchElementException();
     return items[StdRandom.uniform(N)];
   }
 
