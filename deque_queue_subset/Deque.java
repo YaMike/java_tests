@@ -2,7 +2,7 @@ import java.util.NoSuchElementException;
 import java.util.Iterator;
 import java.lang.NullPointerException;
 
-class Deque<Item> implements Iterable<Item> {
+public class Deque<Item> implements Iterable<Item> {
   private int N;
   private Node first;
   private Node last;

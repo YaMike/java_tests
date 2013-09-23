@@ -3,7 +3,7 @@ import java.util.NoSuchElementException;
 import java.lang.UnsupportedOperationException;
 import java.lang.NullPointerException;
 
-class RandomizedQueue<Item> implements Iterable<Item> {
+public class RandomizedQueue<Item> implements Iterable<Item> {
   private int N;
   private Item[] items;
 

@@ -1,4 +1,4 @@
-class Subset {
+public class Subset {
   public static void main(String[] args)
   {
     int k = 0;
