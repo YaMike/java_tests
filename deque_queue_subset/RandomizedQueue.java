@@ -11,8 +11,8 @@ class RandomizedQueue<Item> implements Iterable<Item> {
     for (int i = 0; i < N; i++) {
       temp[i] = items[i];
     }
+    items = null;
     items = temp;
-    N = max;
   }
 
   public RandomizedQueue() {         // construct an empty randomized queue
@@ -29,15 +29,16 @@ class RandomizedQueue<Item> implements Iterable<Item> {
   }
 
   public void enqueue(Item item) {   // add the item
-    if (N == items.length) resize(items.length*2);
-    items[N++] = item;
+    if (N == items.length) resize(2*items.length);
+    items[N] = item;
+    N++;
   }
 
   public Item dequeue() {            // delete and return a random item
     if (isEmpty()) throw new NoSuchElementException();
     int i = StdRandom.uniform(N);
     Item it = items[i];
-    items[i] = items[N--];
+    items[i] = items[--N];
     return it;
   }
 
@@ -55,17 +56,19 @@ class RandomizedQueue<Item> implements Iterable<Item> {
     private int elNumsCnt;
     public RandomIterator() {
       elNumsCnt = N;
+      elNums = new int[elNumsCnt];
       for (int i = 0; i < elNumsCnt; i++) {
         elNums[i] = i;
       }
     }
-    public boolean hasNext() { return N > 0; }
+    public boolean hasNext() { return elNumsCnt > 0; }
     public void remove() { throw new UnsupportedOperationException(); }
     public Item next() {
       if (!hasNext()) throw new NoSuchElementException();
       int idx = StdRandom.uniform(elNumsCnt);
-      elNums[idx] = elNums[elNumsCnt--];
-      return items[idx];
+      Item it = items[elNums[idx]];
+      elNums[idx] = elNums[--elNumsCnt];
+      return it;
     }
   }
 
@@ -76,7 +79,7 @@ class RandomizedQueue<Item> implements Iterable<Item> {
       if (item.length() < 1) break;
       if (item.charAt(0) == '+') {
         s.enqueue(item.substring(1));
-        StdOut.printf("Enqueue string: %s\n", item.substring(2));
+        StdOut.printf("Enqueue string: %s\n", item.substring(1));
       } else
       if (item.charAt(0) == '-') {
         String removed_str = "";
