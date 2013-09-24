@@ -4,7 +4,7 @@ TARG=$(subst .class,,$(OBJS))
 CC=javac
 RUN=java
 ZARCH=collinear.zip
-EXTCLASSES=StdIn StdOut StdRandom StdStats StdArrayIO In
+EXTCLASSES=StdIn StdOut StdRandom StdStats StdArrayIO In StdDraw
 
 all: $(OBJS)
 
@@ -20,7 +20,7 @@ clean:
 	@echo "Removing $(OBJS), $(ZARCH)..."
 	@rm -f $(OBJS) $(ZARCH)
 	@$(foreach ext_class,$(EXTCLASSES),echo "Remove $(ext_class).[java,class]"; rm -f $(ext_class).java;)
-	@rm -rf libs *.class percolation
+	@rm -rf libs *.class
 
 run:
 	@echo "****************************************************************"

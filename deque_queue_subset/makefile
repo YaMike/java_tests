@@ -10,7 +10,7 @@ all: $(OBJS)
 
 %.class:%.java
 	@echo "Compiling..."
-	@mkdir libs 2>/dev/null; cd libs; jar xf ../stdlib.jar; jar xf ../algs4.jar; cd ..;
+	@mkdir libs 2>/dev/null; cd libs; jar xf ../../stdlib.jar; jar xf ../../algs4.jar; cd ..;
 	@$(foreach ext_class,$(EXTCLASSES),cp libs/$(ext_class).java .;)
 	@$(CC) -Xlint $<
 
