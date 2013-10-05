@@ -56,6 +56,7 @@ public class Point implements Comparable<Point> {
 
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
+    @Override
     public int compareTo(Point that) {
       if (this.y == that.y) {
         return this.x - that.x;
@@ -84,6 +85,18 @@ public class Point implements Comparable<Point> {
 
     // unit test
     public static void main(String[] args) {
-        /* YOUR CODE HERE */
+      final int POINTS_COUNT = 5;
+      Point[] aPoints = new Point[POINTS_COUNT];
+
+      for (int i = 0; i < aPoints.length; i++) {
+        aPoints[i] = new Point(100-StdRandom.uniform(200), 100-StdRandom.uniform(200));
+      }
+
+      for (int i = 0; i < aPoints.length; i++) {
+        for (int j = i; j < aPoints.length; j++) {
+          StdOut.printf("Check for slopeTo() between p[%d]%s and p[%d]%s: %f\n", i, aPoints[i].toString(), j, aPoints[j].toString(), aPoints[i].slopeTo(aPoints[j]));
+          StdOut.printf("Check for compare() between p[%d]%s and p[%d]%s: %d\n", i, aPoints[i].toString(), j, aPoints[j].toString(), aPoints[i].SLOPE_ORDER.compare(aPoints[i],aPoints[j]));
+        }
+      }
     }
 }
