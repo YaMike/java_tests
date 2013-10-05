@@ -25,6 +25,7 @@ public class Point implements Comparable<Point> {
         /* DO NOT MODIFY */
         this.x = x;
         this.y = y;
+        SLOPE_ORDER = new SlopeOrder();
     }
 
     // plot this point to standard drawing
@@ -41,19 +42,44 @@ public class Point implements Comparable<Point> {
 
     // slope between this point and that point
     public double slopeTo(Point that) {
-        /* YOUR CODE HERE */
+      if (this.x == that.x) {
+        if (this.y == that.y) {
+          return Double.NEGATIVE_INFINITY;
+        }
+        return Double.POSITIVE_INFINITY;
+      }
+      if (this.y == that.y) {
+        return .0;
+      }
+      return ((double)this.y-that.y)/(this.x-that.x);
     }
 
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {
-        /* YOUR CODE HERE */
+      if (this.y == that.y) {
+        return this.x - that.x;
+      }
+      return this.y - that.y;
     }
 
     // return string representation of this point
     public String toString() {
         /* DO NOT MODIFY */
         return "(" + x + ", " + y + ")";
+    }
+
+    private class SlopeOrder implements Comparator<Point> {
+      public int compare(Point a, Point b) {
+        double slope_a = Point.this.slopeTo(a),
+               slope_b = Point.this.slopeTo(b),
+               difference = slope_a - slope_b,
+               eps = 0e10-6;
+        if (Math.abs(difference) < eps) {
+          return 0;
+        }
+        return Double.compare(slope_a, slope_b);
+      }
     }
 
     // unit test
