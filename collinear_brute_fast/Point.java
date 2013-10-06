@@ -58,6 +58,7 @@ public class Point implements Comparable<Point> {
     // comparing y-coordinates and breaking ties by x-coordinates
     @Override
     public int compareTo(Point that) {
+      if (that == null) throw new NullPointerException();
       if (this.y == that.y) {
         return this.x - that.x;
       }
@@ -75,11 +76,11 @@ public class Point implements Comparable<Point> {
         double slope_a = Point.this.slopeTo(a),
                slope_b = Point.this.slopeTo(b),
                difference = slope_a - slope_b,
-               eps = 0e10-6;
-        if (Math.abs(difference) < eps) {
-          return 0;
-        }
-        return Double.compare(slope_a, slope_b);
+               eps = 1e10-8;
+
+        if (difference < -eps) { return -1; } else 
+        if (difference >  eps) { return  1; } else
+        return 0;
       }
     }
 
