@@ -11,6 +11,8 @@
  *************************************************************************/
 
 import java.util.Comparator;
+import java.util.Arrays;
+import java.lang.System;
 
 public class Point implements Comparable<Point> {
 
@@ -73,31 +75,56 @@ public class Point implements Comparable<Point> {
 
     private class SlopeOrder implements Comparator<Point> {
       public int compare(Point a, Point b) {
-        double slope_a = Point.this.slopeTo(a),
-               slope_b = Point.this.slopeTo(b),
+        double slope_a = slopeTo(a),
+               slope_b = slopeTo(b),
                difference = slope_a - slope_b,
-               eps = 1e10-8;
+               eps = 1e-8;
 
-        if (difference < -eps) { return -1; } else 
-        if (difference >  eps) { return  1; } else
-        return 0;
+        /*
+         *StdOut.printf("slope_a = %f, slope_b = %f, difference = %f, return:", slope_a, slope_b, difference);
+         *if      (difference < -eps) { StdOut.printf("-1\n"); return -1; } 
+         *else if (difference >  eps) { StdOut.printf(" 1\n"); return  1; } 
+         *else                        { StdOut.printf(" 0\n"); return  0; }
+         */
+        return Double.compare(slope_a, slope_b);
       }
     }
 
     // unit test
     public static void main(String[] args) {
-      final int POINTS_COUNT = 5;
-      Point[] aPoints = new Point[POINTS_COUNT];
+      final int POINTS_COUNT = 8;
+      final int POINTS_MAXABS = 10;
+      Point[] aPoints = new Point[POINTS_COUNT],
+              bPoints = new Point[POINTS_COUNT];
 
       for (int i = 0; i < aPoints.length; i++) {
-        aPoints[i] = new Point(100-StdRandom.uniform(200), 100-StdRandom.uniform(200));
+        aPoints[i] = new Point(POINTS_MAXABS-StdRandom.uniform(POINTS_MAXABS), POINTS_MAXABS-StdRandom.uniform(2*POINTS_MAXABS));
       }
 
-      for (int i = 0; i < aPoints.length; i++) {
-        for (int j = i; j < aPoints.length; j++) {
-          StdOut.printf("Check for slopeTo() between p[%d]%s and p[%d]%s: %f\n", i, aPoints[i].toString(), j, aPoints[j].toString(), aPoints[i].slopeTo(aPoints[j]));
-          StdOut.printf("Check for compare() between p[%d]%s and p[%d]%s: %d\n", i, aPoints[i].toString(), j, aPoints[j].toString(), aPoints[i].SLOPE_ORDER.compare(aPoints[i],aPoints[j]));
-        }
+      StdOut.printf("\nInitial array:\n");
+      for (Point s: aPoints) {
+        StdOut.printf("Slope %f, point %s\n",aPoints[0].slopeTo(s), s);
       }
+
+      StdOut.printf("\nSorted array:\n");
+      System.arraycopy(aPoints, 0, bPoints, 0, aPoints.length);
+      Arrays.sort(bPoints);
+      for (Point s: bPoints) {
+        StdOut.printf("Slope %f, point %s\n",bPoints[0].slopeTo(s), s);
+      }
+
+      StdOut.printf("\nSorted by slope order for first elem:\n");
+      Arrays.sort(aPoints, 1, POINTS_COUNT, aPoints[0].SLOPE_ORDER);
+      for (Point s: aPoints) {
+        StdOut.printf("Slope %f, point %s\n",aPoints[0].slopeTo(s), s);
+      }
+      /*
+       *for (int i = 0; i < aPoints.length; i++) {
+       *  for (int j = i; j < aPoints.length; j++) {
+       *    StdOut.printf("Check for slopeTo() between p[%d]%s and p[%d]%s: %f\n", i, aPoints[i].toString(), j, aPoints[j].toString(), aPoints[i].slopeTo(aPoints[j]));
+       *    StdOut.printf("Check for compare() between p[%d]%s and p[%d]%s: %d\n", i, aPoints[i].toString(), j, aPoints[j].toString(), aPoints[i].SLOPE_ORDER.compare(aPoints[i],aPoints[j]));
+       *  }
+       *}
+       */
     }
 }

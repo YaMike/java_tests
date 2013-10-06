@@ -3,8 +3,21 @@ import java.lang.System;
 
 public class Fast {
 
-  private static final int    MIN_COUNT = 4;
-  private static final double EPS = 1e-8;
+  private static final int    SEGM_MIN_COUNT = 3;
+  private static final double EPS = 1e-6;
+
+  private static void processCollinearPoints(Point p, Point[] points, int start, int count) {
+    Point[] parr = new Point[count+1];
+    parr[0] = p;
+
+    System.arraycopy(points, start, parr, 1, count);
+    Arrays.sort(parr);
+    for (int i = 0; i < parr.length-1; i++) {
+      StdOut.print(parr[i] + " -> ");
+    }
+    StdOut.println(parr[parr.length-1]);
+    parr[0].drawTo(parr[parr.length-1]);
+  }
 
   public static void main (String[] args) {
     StdDraw.setXscale(0,32768);
@@ -20,41 +33,39 @@ public class Fast {
       points[i].draw();
     }
 
+    boolean collinear = false;
+    Point p,q;
+    double prevSlope = .0, pqSlope = .0;
+
     for (int i = 0; i < points.length-1; i++) {
-      Point p = points[i];
-      Arrays.sort(points, i+1, points.length-1, points[i].SLOPE_ORDER);
-      double prevSlope = .0;
-      int count = 1, start = 0;
-      StdOut.printf("*************************\n");
+      p = points[i];
+      Arrays.sort(points, i+1, points.length, points[i].SLOPE_ORDER);
+      int collinearPointsCount = 0, start = i+1;
+      prevSlope = p.slopeTo(points[i+1]);
 
+      //StdOut.printf("*************************\n");
       for (int j = i + 1; j < points.length; j++) {
-        Point q = points[j];
-        double pqSlope = p.slopeTo(q);
-        boolean collinear = Math.abs(pqSlope - prevSlope) < EPS;
-        StdOut.printf("slope = %f\n", pqSlope);
-        if (collinear) {
-          StdOut.printf("Collinear! Slope = %f, count = %d\n", pqSlope, count+1);
-          start = j;
-          count++;
+        q = points[j];
+        pqSlope = p.slopeTo(q);
+        if (   (Math.abs(pqSlope - prevSlope) < EPS)
+            || (prevSlope == Double.POSITIVE_INFINITY && pqSlope == Double.POSITIVE_INFINITY)) {
+          collinear = true;
+        } else {
+          collinear = false;
         }
-        if (count >= MIN_COUNT && !collinear) {
-          StdOut.printf("Founded!\n");
-          Point[] parr = new Point[count];
-          parr[0] = p;
-          System.arraycopy(points, start, parr, 1, count-1);
-          Arrays.sort(parr);
-
-          for (int n = 0; n < parr.length-1; n++) {
-            StdOut.print(parr[n] + " -> ");
-          }
-          StdOut.println(parr[parr.length-1]);
-          parr[0].drawTo(parr[parr.length-1]);
-
-          count = 1;
+        if (collinear) {
+          collinearPointsCount++;
+        }
+        if ((!collinear || (j == (points.length-1))) && collinearPointsCount >= SEGM_MIN_COUNT) {
+          //StdOut.printf("Founded (%s,j = %d,start=%d,count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, collinearPointsCount);
+          processCollinearPoints(p, points, start, collinearPointsCount);
+          collinearPointsCount = 1;
         }
         if (!collinear) {
-          count = 1;
+          start = j;
+          collinearPointsCount = 1;
         }
+        //StdOut.printf("Slope=%f,%s,j=%d,col=%s,cnt=%d\n", pqSlope, q, j, collinear ? "true" : "false", collinearPointsCount);
         prevSlope = pqSlope;
       }
     }
