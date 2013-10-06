@@ -1,4 +1,4 @@
-SRC=Brute.java Fast.java Point.java
+SRC=Brute.java Fast.java Point.java PointPlotter.java
 OBJS=$(subst .java,.class,$(SRC))
 TARG=$(subst .class,,$(OBJS))
 CC=javac
@@ -18,7 +18,7 @@ prepare_tests:
 	@rm -rf $(TESTARCHNAME); unzip -o $(TESTARCHNAME) > /dev/null
 
 %.class:%.java
-	@echo "Compiling..."
+	@echo "Compiling \"$<\"..."
 	@$(foreach ext_class,$(EXTCLASSES),cp libs/$(ext_class).java .;)
 	@$(CC) -Xlint $<
 
@@ -38,5 +38,5 @@ run:
 
 zip:
 	@echo "Creating *.zip archive..."
-	@zip ~/$(ZARCH) $(SRC)
+	@zip ~/$(ZARCH) $(filter-out PointPlotter.java,$(SRC))
 	@echo "~/$(ZARCH) has been created."
