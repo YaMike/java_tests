@@ -62,9 +62,9 @@ public class Point implements Comparable<Point> {
     public int compareTo(Point that) {
       if (that == null) throw new NullPointerException();
       if (this.y == that.y) {
-        return this.x - that.x;
+        return that.x - this.x;
       }
-      return this.y - that.y;
+      return that.y - this.y;
     }
 
     // return string representation of this point
@@ -96,7 +96,7 @@ public class Point implements Comparable<Point> {
       }
 
       /* comparable interface test */
-      StdOut.printf("\nSorted array:\n");
+      StdOut.printf("\nSorted array by natural order:\n");
       System.arraycopy(aPoints, 0, bPoints, 0, aPoints.length);
       Arrays.sort(bPoints);
       for (Point s: bPoints) {
