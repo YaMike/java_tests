@@ -28,13 +28,13 @@ public class Brute {
 
         for (int k = j + 1; k < points.length; k++) {
           linePoints[2] = points[k];
-          lineSlope[1] = linePoints[2].slopeTo(linePoints[1]);
+          lineSlope[1] = linePoints[2].slopeTo(linePoints[0]);
           if (lineSlope[0] != lineSlope[1]) continue;
 
           for (int l = k + 1; l < points.length; l++) {
             linePoints[3] = points[l];
-            lineSlope[2] = linePoints[3].slopeTo(linePoints[2]);
-            if (lineSlope[1] != lineSlope[2]) continue;
+            lineSlope[2] = linePoints[3].slopeTo(linePoints[0]);
+            if (lineSlope[0] != lineSlope[2]) continue;
 
             Arrays.sort(linePoints);
 
