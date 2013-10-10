@@ -36,6 +36,10 @@ run:
 	@echo "Here a place for unit tests"
 	@echo "****************************************************************"
 
+turn_debug:
+	@echo "Switching on debug mode..."
+	@sed -i 's/DEBUG=false/DEBUG=true/' $(SRC)
+
 zip:
 	@echo "Switching off debug mode..."
 	@sed -i 's/DEBUG=true/DEBUG=false/' $(SRC)
