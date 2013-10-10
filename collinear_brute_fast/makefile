@@ -37,6 +37,8 @@ run:
 	@echo "****************************************************************"
 
 zip:
+	@echo "Switching off debug mode..."
+	@sed -i 's/DEBUG=true/DEBUG=false/' $(SRC)
 	@echo "Creating *.zip archive..."
 	@zip ~/$(ZARCH) $(filter-out PointPlotter.java,$(SRC))
 	@echo "~/$(ZARCH) has been created."
