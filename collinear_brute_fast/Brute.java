@@ -1,10 +1,10 @@
 import java.util.Arrays;
 
 public class Brute {
-  public static void main (String[] args) {
+  public static void main(String[] args) {
 
-    StdDraw.setXscale(0,32768);
-    StdDraw.setYscale(0,32768);
+    StdDraw.setXscale(0, 32768);
+    StdDraw.setYscale(0, 32768);
 
     String filename = args[0];
     In in = new In(filename);
