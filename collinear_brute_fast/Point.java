@@ -62,9 +62,9 @@ public class Point implements Comparable<Point> {
     public int compareTo(Point that) {
       if (that == null) throw new NullPointerException();
       if (this.y == that.y) {
-        return that.x - this.x;
+        return this.x - that.x;
       }
-      return that.y - this.y;
+      return this.y - that.y;
     }
 
     // return string representation of this point
