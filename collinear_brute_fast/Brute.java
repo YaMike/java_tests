@@ -19,6 +19,8 @@ public class Brute {
     Point[] linePoints = new Point[4];
     double[] lineSlope = new double[3];
 
+    Arrays.sort(points);
+
     for (int i = 0; i < points.length; i++) {
       linePoints[0] = points[i];
 
