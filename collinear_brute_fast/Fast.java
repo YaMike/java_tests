@@ -14,10 +14,12 @@ public class Fast {
     System.arraycopy(points, start, parr, 1, count);
     Arrays.sort(parr);
     if (DEBUG) {
-      StdOut.printf("origin=%s, parr[0]=%s\n", p, parr[count]);
-      for (Point s: parr) {
-        StdOut.print(s+"->");
-      }
+      StdOut.printf("Origin point =%s, parr[0]=%s\n", p, parr[count]);
+      /*
+       *for (Point s: parr) {
+       *  StdOut.print(s+"->");
+       *}
+       */
     }
     if (0 != parr[0].compareTo(p)) return;
     for (int i = 0; i < parr.length-1; i++) {
@@ -41,6 +43,13 @@ public class Fast {
       origins[i] = new Point(in.readInt(), in.readInt());
       origins[i].draw();
     }
+    if (DEBUG) {
+      StdOut.printf("origins:\n");
+      for (Point s: origins) {
+        StdOut.printf("%s ",s);
+      }
+      StdOut.printf("\n");
+    }
 
     boolean collinear = false;
     Point p,q;
@@ -53,12 +62,26 @@ public class Fast {
       if (DEBUG) {
         StdOut.printf("i = %d\n", i);
       }
-      System.arraycopy(origins, i+1, points, 0, origins.length-i-1);
+      System.arraycopy(origins, i, points, 0, origins.length-i-1);
+      if (DEBUG) {
+        StdOut.printf("Origins copy (used 0 - %d):\n", points.length-i-1);
+        for (Point s: origins) {
+          StdOut.printf("%s ",s);
+        }
+        StdOut.printf("\n");
+      }
       Arrays.sort(points, 0, points.length-i, p.SLOPE_ORDER);
+      if (DEBUG) {
+        StdOut.printf("Sorted origins copy (used 0 - %d):\n", points.length-i-1);
+        for (Point s: points) {
+          StdOut.printf("%s ",s);
+        }
+        StdOut.printf("\n");
+      }
 
       int collinearPointsCount = 1, start = 0;
       prevSlope = p.slopeTo(points[i+1]);
-      if (i > 0 && origins[i].compareTo(origins[i-1])==0) continue;
+      if (i > 0 && origins[i+1].compareTo(origins[i])==0) continue;
 
       if (DEBUG) {
         StdOut.printf("*************************\n");
@@ -79,7 +102,7 @@ public class Fast {
           if (DEBUG) {
             StdOut.printf("Founded (%s,j = %d,start=%d,count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, collinearPointsCount);
           }
-          processCollinearPoints(p, points, start, collinearPointsCount);
+          processCollinearPoints(p, points, start, collinearPointsCount-1);
           collinearPointsCount = 1;
         }
         if (!collinear) {
