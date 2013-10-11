@@ -5,7 +5,7 @@ public class Fast {
 
   private static final int     MIN_COUNT = 3;
   private static final double  EPS = 1e-6;
-  private static final boolean DEBUG=false;
+  private static final boolean DEBUG=true;
 
   private static void processCollinearPoints(Point p, Point[] points, int start, int count) {
     Point[] parr = new Point[count+1];
@@ -58,6 +58,7 @@ public class Fast {
     if (DEBUG) { printPointsArray("origins", origins); }
 
     for (int i = 0; i < origins.length-1; i++) {
+      if (DEBUG) { StdOut.printf("*************************\n"); }
       p = origins[i];
       if (DEBUG) {
         StdOut.printf("i = %d\n", i);
@@ -72,7 +73,6 @@ public class Fast {
       int slopesCount = 1, start = 0;
       if (i > 0 && origins[i+1].compareTo(origins[i])==0) continue;
 
-      if (DEBUG) { StdOut.printf("*************************\n"); }
       for (int j = 0; j < points.length; j++) {
         q = points[j];
         pqSlope = p.slopeTo(q);
