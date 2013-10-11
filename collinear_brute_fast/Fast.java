@@ -3,7 +3,7 @@ import java.lang.System;
 
 public class Fast {
 
-  private static final int     MIN_COUNT = 4;
+  private static final int     MIN_COUNT = 3;
   private static final double  EPS = 1e-6;
   private static final boolean DEBUG=false;
 
@@ -69,7 +69,7 @@ public class Fast {
       Arrays.sort(points, p.SLOPE_ORDER);
       if (DEBUG) { printPointsArray("Sorted origins copy", points); }
 
-      int collinearPointsCount = 1, start = 0;
+      int slopesCount = 1, start = 0;
       if (i > 0 && origins[i+1].compareTo(origins[i])==0) continue;
 
       if (DEBUG) { StdOut.printf("*************************\n"); }
@@ -87,21 +87,22 @@ public class Fast {
           collinear = false;
         }
         if (collinear) {
-          collinearPointsCount++;
+          if (slopesCount == 0) slopesCount = 1;
+          slopesCount++;
         }
-        if ((!collinear || (j == (origins.length-i-1))) && collinearPointsCount >= MIN_COUNT) {
+        if ((!collinear || (j == (origins.length-i-1))) && slopesCount >= MIN_COUNT) {
           if (DEBUG) {
-            StdOut.printf("Founded (%s,j = %d,start=%d, points count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, collinearPointsCount);
+            StdOut.printf("Founded (%s,j = %d,start=%d, points count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, slopesCount);
           }
-          processCollinearPoints(p, points, start, collinearPointsCount-1);
-          collinearPointsCount = 2;
+          processCollinearPoints(p, points, start, slopesCount-1);
+          slopesCount = 0;
         }
         if (!collinear) {
           start = j;
-          collinearPointsCount = 2;
+          slopesCount = 0;
         }
         if (DEBUG) {
-          StdOut.printf("Slope=%f,%s,j=%d,col=%s,points cnt=%d\n", pqSlope, q, j, collinear ? "true" : "false", collinearPointsCount);
+          StdOut.printf("Slope=%f,%s,j=%d,col=%s,points cnt=%d\n", pqSlope, q, j, collinear ? "true" : "false", slopesCount);
         }
         prevSlope = pqSlope;
       }
