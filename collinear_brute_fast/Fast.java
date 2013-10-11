@@ -45,39 +45,41 @@ public class Fast {
     In in = new In(filename);
     int N = in.readInt();
 
-    Point[] points = new Point[N],
-            origins = new Point[N];
+    Point[] origins = new Point[N];
     for (int i = 0; i < origins.length; i++) {
       origins[i] = new Point(in.readInt(), in.readInt());
       origins[i].draw();
     }
 
-    if (DEBUG) { printPointsArray("origins", origins); }
-
     boolean collinear = false;
     Point p,q;
     double prevSlope = .0, pqSlope = .0;
     Arrays.sort(origins);
-    System.arraycopy(origins,0,points,0,points.length);
+    if (DEBUG) { printPointsArray("origins", origins); }
 
     for (int i = 0; i < origins.length-1; i++) {
       p = origins[i];
       if (DEBUG) {
         StdOut.printf("i = %d\n", i);
       }
-      System.arraycopy(origins, i+1, points, 0, origins.length-i-1);
+      int count = origins.length-i;
+      Point[] points = new Point[count];
+      System.arraycopy(origins, i, points, 0, count);
       if (DEBUG) { printPointsArray("Origins copy", points); }
-      Arrays.sort(points, 0, points.length-i-1, p.SLOPE_ORDER);
+      Arrays.sort(points, p.SLOPE_ORDER);
       if (DEBUG) { printPointsArray("Sorted origins copy", points); }
 
       int collinearPointsCount = 1, start = 0;
-      prevSlope = p.slopeTo(points[i+1]);
       if (i > 0 && origins[i+1].compareTo(origins[i])==0) continue;
 
       if (DEBUG) { StdOut.printf("*************************\n"); }
-      for (int j = 0; j < points.length-i; j++) {
+      for (int j = 0; j < points.length; j++) {
         q = points[j];
         pqSlope = p.slopeTo(q);
+        if (j == 0) {
+          prevSlope = pqSlope;
+          continue;
+        }
         if (   (Math.abs(pqSlope - prevSlope) < EPS)
             || (prevSlope == Double.POSITIVE_INFINITY && pqSlope == Double.POSITIVE_INFINITY)) {
           collinear = true;
@@ -89,17 +91,17 @@ public class Fast {
         }
         if ((!collinear || (j == (origins.length-i-1))) && collinearPointsCount >= MIN_COUNT) {
           if (DEBUG) {
-            StdOut.printf("Founded (%s,j = %d,start=%d,count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, collinearPointsCount);
+            StdOut.printf("Founded (%s,j = %d,start=%d, points count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, collinearPointsCount);
           }
           processCollinearPoints(p, points, start, collinearPointsCount-1);
-          collinearPointsCount = 1;
+          collinearPointsCount = 2;
         }
         if (!collinear) {
           start = j;
-          collinearPointsCount = 1;
+          collinearPointsCount = 2;
         }
         if (DEBUG) {
-          StdOut.printf("Slope=%f,%s,j=%d,col=%s,cnt=%d\n", pqSlope, q, j, collinear ? "true" : "false", collinearPointsCount);
+          StdOut.printf("Slope=%f,%s,j=%d,col=%s,points cnt=%d\n", pqSlope, q, j, collinear ? "true" : "false", collinearPointsCount);
         }
         prevSlope = pqSlope;
       }
