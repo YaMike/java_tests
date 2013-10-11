@@ -3,7 +3,7 @@ import java.lang.System;
 
 public class Fast {
 
-  private static final int     MIN_COUNT = 3;
+  private static final int     MIN_COUNT = 4;
   private static final double  EPS = 1e-6;
   private static final boolean DEBUG=false;
 
@@ -29,6 +29,14 @@ public class Fast {
     parr[0].drawTo(parr[parr.length-1]);
   }
 
+  private static void printPointsArray(String name, Point[] arr) {
+      StdOut.printf("%s:\n", name);
+      for (Point s: arr) {
+        StdOut.printf("%s ",s);
+      }
+      StdOut.printf("\n");
+  }
+
   public static void main (String[] args) {
     StdDraw.setXscale(0,32768);
     StdDraw.setYscale(0,32768);
@@ -43,13 +51,8 @@ public class Fast {
       origins[i] = new Point(in.readInt(), in.readInt());
       origins[i].draw();
     }
-    if (DEBUG) {
-      StdOut.printf("origins:\n");
-      for (Point s: origins) {
-        StdOut.printf("%s ",s);
-      }
-      StdOut.printf("\n");
-    }
+
+    if (DEBUG) { printPointsArray("origins", origins); }
 
     boolean collinear = false;
     Point p,q;
@@ -57,35 +60,21 @@ public class Fast {
     Arrays.sort(origins);
     System.arraycopy(origins,0,points,0,points.length);
 
-    for (int i = 0; i < points.length-1; i++) {
+    for (int i = 0; i < origins.length-1; i++) {
       p = origins[i];
       if (DEBUG) {
         StdOut.printf("i = %d\n", i);
       }
-      System.arraycopy(origins, i, points, 0, origins.length-i-1);
-      if (DEBUG) {
-        StdOut.printf("Origins copy (used 0 - %d):\n", points.length-i-1);
-        for (Point s: origins) {
-          StdOut.printf("%s ",s);
-        }
-        StdOut.printf("\n");
-      }
-      Arrays.sort(points, 0, points.length-i, p.SLOPE_ORDER);
-      if (DEBUG) {
-        StdOut.printf("Sorted origins copy (used 0 - %d):\n", points.length-i-1);
-        for (Point s: points) {
-          StdOut.printf("%s ",s);
-        }
-        StdOut.printf("\n");
-      }
+      System.arraycopy(origins, i+1, points, 0, origins.length-i-1);
+      if (DEBUG) { printPointsArray("Origins copy", points); }
+      Arrays.sort(points, 0, points.length-i-1, p.SLOPE_ORDER);
+      if (DEBUG) { printPointsArray("Sorted origins copy", points); }
 
       int collinearPointsCount = 1, start = 0;
       prevSlope = p.slopeTo(points[i+1]);
       if (i > 0 && origins[i+1].compareTo(origins[i])==0) continue;
 
-      if (DEBUG) {
-        StdOut.printf("*************************\n");
-      }
+      if (DEBUG) { StdOut.printf("*************************\n"); }
       for (int j = 0; j < points.length-i; j++) {
         q = points[j];
         pqSlope = p.slopeTo(q);
