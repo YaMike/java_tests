@@ -52,7 +52,7 @@ public class Fast {
     Arrays.sort(origins);
     if (DEBUG) { printPointsArray("origins", origins); }
 
-    for (int i = 0; i < origins.length-MIN_COUNT; i++) {
+    for (int i = 0; i < origins.length; i++) {
       if (DEBUG) { StdOut.printf("\n*************************\n"); }
       p = origins[i];
       if (DEBUG) {
@@ -66,16 +66,14 @@ public class Fast {
       if (DEBUG) { printPointsArray("Sorted origins copy", points); }
 
       int slopesCount = 1, start = 0;
-      if (i > 0 && origins[i+1].compareTo(origins[i])==0) continue;
+      if (i > 0 && origins[i-1].compareTo(origins[i])==0) continue;
 
       for (int j = 0; j < points.length; j++) {
         q = points[j];
         pqSlope = p.slopeTo(q);
         if (j == 0) {
           prevSlope = pqSlope;
-          if (DEBUG) {
-            StdOut.printf("Slope=%f,%s,j=%d,col=%s,slopes cnt=%d\n", pqSlope, q, j, "unknown", slopesCount);
-          }
+          if (DEBUG) { StdOut.printf("Slope=%f,%s,j=%d,col=%s,slopes cnt=%d\n", pqSlope, q, j, "unknown", slopesCount); }
           continue;
         }
         if (   (Math.abs(pqSlope - prevSlope) < EPS)
@@ -88,13 +86,9 @@ public class Fast {
           if (slopesCount == 0) slopesCount = 1;
           slopesCount++;
         }
-        if (DEBUG) {
-          StdOut.printf("Slope=%f,%s,j=%d,col=%s,slopes cnt=%d\n", pqSlope, q, j, collinear ? "true" : "false", slopesCount);
-        }
+        if (DEBUG) { StdOut.printf("Slope=%f,%s,j=%d,col=%s,slopes cnt=%d\n", pqSlope, q, j, collinear ? "true" : "false", slopesCount); }
         if ((!collinear || (j == (points.length-1))) && slopesCount >= MIN_COUNT) {
-          if (DEBUG) {
-            StdOut.printf("\n\\o/ Founded (%s,j = %d,start=%d, slopes count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, slopesCount);
-          }
+          if (DEBUG) { StdOut.printf("\n\\o/ Founded (%s,j = %d,start=%d, slopes count=%d)!\n", collinear ? "collinear" : "not collinear", j, start, slopesCount); }
           processCollinearPoints(p, points, start, slopesCount);
           slopesCount = 0;
         }
