@@ -3,7 +3,7 @@ OBJS=$(subst .java,.class,$(SRC))
 TARG=$(subst .class,,$(OBJS))
 CC=javac
 RUN=java
-ZARCH=collinear.zip
+ZARCH=puzzle.zip
 TESTARCHNAME=8puzzle-testing
 EXTCLASSES=StdIn StdOut StdRandom StdStats StdArrayIO In StdDraw
 
@@ -27,7 +27,7 @@ prepare_tests:
 clean:
 	@echo "Removing $(OBJS), $(ZARCH), $(TESTARCHNAME)..."
 	@rm -f $(OBJS) $(ZARCH)
-	@rm -rf collinear
+	@rm -rf 8puzzle
 	@$(foreach ext_class,$(EXTCLASSES),echo "Remove $(ext_class).[java,class]"; rm -f $(ext_class).java;)
 	@rm -rf libs *.class
 
