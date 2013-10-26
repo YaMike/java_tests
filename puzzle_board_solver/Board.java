@@ -9,11 +9,12 @@ public class Board {
 		if (src == null) throw new NullPointerException();
     if (src.length > DIM_LIMIT) throw new IllegalArgumentException();
     byte len = (byte)(src.length);
-    short[] dst = new short[len*len];
+    short[] dst = new short[len*len+1];
+    dst[0] = 0;
     for (byte i = 0; i < len; i++) {
       assert src.length == len;
       for (byte j = 0; j < len; j++) {
-        dst[i*len+j] = (short)src[i][j];
+        dst[1+i*len+j] = (short)src[i][j];
       }
     }
     return dst;
@@ -21,15 +22,16 @@ public class Board {
 
   public Board(int[][] blocks) {          // construct a board from an N-by-N array of blocks
     this.blocks = copyBoard(blocks);
+    this.dim = blocks.length;
   }
 
-	public Board(short[] blocks) {
+	private Board(byte dim, short[] blocks) {
 		this.blocks = blocks;
+    this.dim = dim;
 	}
 
   // (where blocks[i][j] = block in row i, column j)
-  public int dimension()                 // board dimension N
-  {
+  public int dimension() {               // board dimension N
     return dim;
   }
 
@@ -46,7 +48,7 @@ public class Board {
 
   public int manhattan() {                // sum of Manhattan distances between blocks and goal
     int total = 0;
-		short size = (short)(dim*dim);
+		short size = dim*dim;
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i && blocks[i] != 0) {
         short actRow = (short)((blocks[i]-1)/dim), actCol = (short)((blocks[i]-1)%dim),
@@ -62,7 +64,7 @@ public class Board {
       return false;
     }
 
-		short size = (short)(dim*dim);
+		short size = dim*dim;
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i) {
         return false;
@@ -74,7 +76,24 @@ public class Board {
   public Board twin() {                    // a board obtained by exchanging two adjacent blocks in the same row
 		short[] twin_blocks = new short[dim*dim+1];
 		System.arraycopy(blocks, 0, twin_blocks, 0, blocks.length);
-		return new Board(twin_blocks);
+
+    short value = 0;
+    short size = dim*dim;
+    short column = 0;
+    twin_blocks[0] = 0;
+
+    for (int i = 1; i <= size; ++i) {
+      column = (i - 1) % dim;
+      if (   twin_blocks[i] != 0 
+          && column > 0 
+          && twin_blocks[i-1] != 0) {
+        short tempValue = twin_blocks[i];
+        twin_blocks[i] = twin_blocks[i-1];
+        twin_blocks[i-1] = tempValue;
+        break;
+      }
+    }
+		return new Board(dim, twin_blocks);
   }
 
   public boolean equals(Object y)        // does this board equal y?
@@ -88,17 +107,48 @@ public class Board {
     return true;
   }
 
-  public Iterable<Board> neighbors()     // all neighboring boards
-  {
+  private short[] swapElems(short elem1, short elem2) {
+
+    short[] blocksCopy = new short[this.blocks.length];
+    System.arraycopy(this.blocks, 0, blocksCopy, 0, this.blocks.length);
+
+    short tempValue = blocksCopy[elem1];
+    blocksCopy[elem1] = blocksCopy[elem2];
+    blocksCopy[elem2] = tempValue;
+
+    return blocksCopy;
+  }
+
+  public Iterable<Board> neighbors() {   // all neighboring boards
 		Queue<Board> q = new Queue<Board>();
 
+    short size = dim*dim;
+    short pos = 1;
 
-		/*TODO*/
+    for (; pos < size; ++pos) {
+      if (0 == blocks[pos]) { break; }
+    }
+
+    short row = (pos-1)/dim;
+    short col = (pos-1)%dim;
+
+    if (row > 0) {
+      q.enqueue(new Board(dim, swapElems(pos-1, pos)));
+    }
+    if (row < (dim-1)) {
+      q.enqueue(new Board(dim, swapElems(pos, pos+1)));
+    }
+    if (col > 0) {
+      q.enqueue(new Board(dim, swapElems(pos-dim, pos)));
+    }
+    if (col < (dim-1)) {
+      q.enqueue(new Board(dim, swapElems(pos, pos+dim)));
+    }
 		return q;
   }
 
-  public String toString()               // string representation of the board (in the output format specified below)
-  {
+  public String toString() {             // string representation of the board (in the output format specified below)
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("%d\n", dim));
 		short size = (short)(dim*dim);
