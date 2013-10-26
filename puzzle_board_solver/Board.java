@@ -7,7 +7,7 @@ public class Board {
   private byte dim;
 
   private short[] copyBoard(int[][] src) {
-		if (src == null) throw new NullPointerException();
+    if (src == null) throw new NullPointerException();
     if (src.length > DIM_LIMIT) throw new IllegalArgumentException();
     byte len = (byte)(src.length);
     short[] dst = new short[len*len+1];
@@ -26,10 +26,10 @@ public class Board {
     this.dim = (byte)blocks.length;
   }
 
-	private Board(byte dim, short[] blocks) {
-		this.blocks = blocks;
+  private Board(byte dim, short[] blocks) {
+    this.blocks = blocks;
     this.dim = dim;
-	}
+  }
 
   // (where blocks[i][j] = block in row i, column j)
   public int dimension() {               // board dimension N
@@ -38,7 +38,7 @@ public class Board {
 
   public int hamming() {                 // number of blocks out of place
     int outOfPlace = 0;
-		short size = (byte)(dim*dim);
+    short size = (byte)(dim*dim);
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i && blocks[i] != 0) {
         outOfPlace++;
@@ -49,7 +49,7 @@ public class Board {
 
   public int manhattan() {                // sum of Manhattan distances between blocks and goal
     int total = 0;
-		short size = (short)(dim*dim);
+    short size = (short)(dim*dim);
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i && blocks[i] != 0) {
         short actRow = (short)((blocks[i]-1)/dim), actCol = (short)((blocks[i]-1)%dim),
@@ -65,7 +65,7 @@ public class Board {
       return false;
     }
 
-		short size = (short)(dim*dim);
+    short size = (short)(dim*dim);
     for (short i = 1; i < size; i++) {
       if (blocks[i] != i) {                                                                        if (DEBUG) System.out.println("why not goal: "+Arrays.toString(blocks));
         return false;
@@ -75,8 +75,8 @@ public class Board {
   }
 
   public Board twin() {                    // a board obtained by exchanging two adjacent blocks in the same row
-		short[] twin_blocks = new short[dim*dim+1];
-		System.arraycopy(blocks, 0, twin_blocks, 0, blocks.length);
+    short[] twin_blocks = new short[dim*dim+1];
+    System.arraycopy(blocks, 0, twin_blocks, 0, blocks.length);
 
     short value = 0;
     short size = (short)(dim*dim);
@@ -92,9 +92,9 @@ public class Board {
         twin_blocks[i] = twin_blocks[i-1];
         twin_blocks[i-1] = tempValue;
         break;
-      }
+          }
     }
-		return new Board(dim, twin_blocks);
+    return new Board(dim, twin_blocks);
   }
 
   public boolean equals(Object y)        // does this board equal y?
@@ -112,7 +112,7 @@ public class Board {
 
     short[] blocksCopy = new short[this.blocks.length];
     System.arraycopy(this.blocks, 0, blocksCopy, 0, this.blocks.length);
-                                                                                                   if (DEBUG) System.out.println("elem1="+elem1+",elem2="+elem2);
+    if (DEBUG) System.out.println("elem1="+elem1+",elem2="+elem2);
     short tempValue = blocksCopy[elem1];
     blocksCopy[elem1] = blocksCopy[elem2];
     blocksCopy[elem2] = tempValue;
@@ -121,7 +121,7 @@ public class Board {
   }
 
   public Iterable<Board> neighbors() {   // all neighboring boards
-		Queue<Board> q = new Queue<Board>();
+    Queue<Board> q = new Queue<Board>();
 
     short size = (short)(dim*dim);
     short pos = 1;
@@ -132,7 +132,7 @@ public class Board {
 
     short row = (short)((pos-1)/dim);
     short col = (short)((pos-1)%dim);
-                                                                                                   if (DEBUG) System.out.println("pos="+pos+", row="+row+", col="+col+", dim="+dim);
+    if (DEBUG) System.out.println("pos="+pos+", row="+row+", col="+col+", dim="+dim);
 
     if (row > 0) {                                                                                 if (DEBUG) System.out.println("if (row > 0)");
       q.enqueue(new Board(dim, swapElems((short)(pos-dim), pos)));
@@ -146,17 +146,17 @@ public class Board {
     if (col < (dim-1)) {                                                                           if (DEBUG) System.out.println("if (col < (dim-1))");
       q.enqueue(new Board(dim, swapElems(pos, (short)(pos+1))));
     }
-		return q;
+    return q;
   }
 
   public String toString() {             // string representation of the board (in the output format specified below)
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%d\n", dim));
-		short size = (short)(dim*dim);
+    StringBuilder sb = new StringBuilder();
+    sb.append(String.format("%d\n", dim));
+    short size = (short)(dim*dim);
     for (short i = 1; i <= size; i++) {
-			sb.append(String.format("%2d%s", blocks[i], i % dim == 0 ? "\n" : " "));
+      sb.append(String.format("%2d%s", blocks[i], i % dim == 0 ? "\n" : " "));
     }
-		return sb.toString();
+    return sb.toString();
   }
 }
