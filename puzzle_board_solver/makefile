@@ -5,7 +5,7 @@ CC=javac
 RUN=java
 ZARCH=puzzle.zip
 TESTARCHNAME=8puzzle-testing
-EXTCLASSES=StdIn StdOut StdRandom StdStats StdArrayIO In StdDraw
+EXTCLASSES=StdIn StdOut StdRandom StdStats StdArrayIO In StdDraw Queue
 
 all: prepare_libs $(OBJS) prepare_tests
 
