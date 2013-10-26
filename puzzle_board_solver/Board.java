@@ -26,7 +26,7 @@ public class Board {
     this.dim = (byte)blocks.length;
   }
 
-	public Board(byte dim, short[] blocks) {
+	private Board(byte dim, short[] blocks) {
 		this.blocks = blocks;
     this.dim = dim;
 	}
