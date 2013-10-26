@@ -22,10 +22,10 @@ public class Board {
 
   public Board(int[][] blocks) {          // construct a board from an N-by-N array of blocks
     this.blocks = copyBoard(blocks);
-    this.dim = blocks.length;
+    this.dim = (byte)blocks.length;
   }
 
-	private Board(byte dim, short[] blocks) {
+	public Board(byte dim, short[] blocks) {
 		this.blocks = blocks;
     this.dim = dim;
 	}
@@ -37,7 +37,7 @@ public class Board {
 
   public int hamming() {                 // number of blocks out of place
     int outOfPlace = 0;
-		short size = dim*dim;
+		short size = (byte)(dim*dim);
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i && blocks[i] != 0) {
         outOfPlace++;
@@ -48,7 +48,7 @@ public class Board {
 
   public int manhattan() {                // sum of Manhattan distances between blocks and goal
     int total = 0;
-		short size = dim*dim;
+		short size = (short)(dim*dim);
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i && blocks[i] != 0) {
         short actRow = (short)((blocks[i]-1)/dim), actCol = (short)((blocks[i]-1)%dim),
@@ -64,7 +64,7 @@ public class Board {
       return false;
     }
 
-		short size = dim*dim;
+		short size = (short)(dim*dim);
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i) {
         return false;
@@ -78,12 +78,12 @@ public class Board {
 		System.arraycopy(blocks, 0, twin_blocks, 0, blocks.length);
 
     short value = 0;
-    short size = dim*dim;
+    short size = (short)(dim*dim);
     short column = 0;
     twin_blocks[0] = 0;
 
     for (int i = 1; i <= size; ++i) {
-      column = (i - 1) % dim;
+      column = (short)((i - 1) % dim);
       if (   twin_blocks[i] != 0 
           && column > 0 
           && twin_blocks[i-1] != 0) {
@@ -122,27 +122,27 @@ public class Board {
   public Iterable<Board> neighbors() {   // all neighboring boards
 		Queue<Board> q = new Queue<Board>();
 
-    short size = dim*dim;
+    short size = (short)(dim*dim);
     short pos = 1;
 
     for (; pos < size; ++pos) {
       if (0 == blocks[pos]) { break; }
     }
 
-    short row = (pos-1)/dim;
-    short col = (pos-1)%dim;
+    short row = (short)((pos-1)/dim);
+    short col = (short)((pos-1)%dim);
 
     if (row > 0) {
-      q.enqueue(new Board(dim, swapElems(pos-1, pos)));
+      q.enqueue(new Board(dim, swapElems((short)(pos-1), pos)));
     }
     if (row < (dim-1)) {
-      q.enqueue(new Board(dim, swapElems(pos, pos+1)));
+      q.enqueue(new Board(dim, swapElems(pos, (short)(pos+1))));
     }
     if (col > 0) {
-      q.enqueue(new Board(dim, swapElems(pos-dim, pos)));
+      q.enqueue(new Board(dim, swapElems((short)(pos-dim), pos)));
     }
     if (col < (dim-1)) {
-      q.enqueue(new Board(dim, swapElems(pos, pos+dim)));
+      q.enqueue(new Board(dim, swapElems(pos, (short)(pos+dim))));
     }
 		return q;
   }
