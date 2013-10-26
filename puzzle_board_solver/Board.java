@@ -92,7 +92,7 @@ public class Board {
         twin_blocks[i] = twin_blocks[i-1];
         twin_blocks[i-1] = tempValue;
         break;
-          }
+      }
     }
     return new Board(dim, twin_blocks);
   }
