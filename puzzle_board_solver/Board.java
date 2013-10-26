@@ -3,17 +3,17 @@ import java.util.Arrays;
 public class Board {
   private static int DIM_LIMIT = 128;
   private short[] blocks;
+  private byte dim;
 
   private short[] copyBoard(int[][] src) {
 		if (src == null) throw new NullPointerException();
     if (src.length > DIM_LIMIT) throw new IllegalArgumentException();
     byte len = (byte)(src.length);
-    short[] dst = new short[len*len+1];
-    dst[0] = (short)len;
+    short[] dst = new short[len*len];
     for (byte i = 0; i < len; i++) {
       assert src.length == len;
       for (byte j = 0; j < len; j++) {
-        dst[1+i*len+j] = (short)src[i][j];
+        dst[i*len+j] = (short)src[i][j];
       }
     }
     return dst;
@@ -30,12 +30,12 @@ public class Board {
   // (where blocks[i][j] = block in row i, column j)
   public int dimension()                 // board dimension N
   {
-    return blocks[0];
+    return dim;
   }
 
   public int hamming() {                 // number of blocks out of place
     int outOfPlace = 0;
-		short size = (short)(blocks[0]*blocks[0]);
+		short size = dim*dim;
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i && blocks[i] != 0) {
         outOfPlace++;
@@ -46,7 +46,6 @@ public class Board {
 
   public int manhattan() {                // sum of Manhattan distances between blocks and goal
     int total = 0;
-		short dim = blocks[0];
 		short size = (short)(dim*dim);
     for (short i = 1; i <= size; i++) {
       if (blocks[i] != i && blocks[i] != 0) {
@@ -59,7 +58,6 @@ public class Board {
   }
 
   public boolean isGoal() {              // is this board the goal board?
-		short dim = blocks[0];
     if (blocks[dim*dim] != 0) {
       return false;
     }
@@ -74,7 +72,6 @@ public class Board {
   }
 
   public Board twin() {                    // a board obtained by exchanging two adjacent blocks in the same row
-		short dim = blocks[0];
 		short[] twin_blocks = new short[dim*dim+1];
 		System.arraycopy(blocks, 0, twin_blocks, 0, blocks.length);
 		return new Board(twin_blocks);
@@ -94,6 +91,8 @@ public class Board {
   public Iterable<Board> neighbors()     // all neighboring boards
   {
 		Queue<Board> q = new Queue<Board>();
+
+
 		/*TODO*/
 		return q;
   }
@@ -101,7 +100,6 @@ public class Board {
   public String toString()               // string representation of the board (in the output format specified below)
   {
 		StringBuilder sb = new StringBuilder();
-		short dim = blocks[0];
 		sb.append(String.format("%d\n", dim));
 		short size = (short)(dim*dim);
     for (short i = 1; i < size; i++) {
