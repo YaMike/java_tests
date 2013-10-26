@@ -1,6 +1,7 @@
 import java.util.Arrays;
 
 public class Board {
+  private boolean DEBUG = true;
   private static int DIM_LIMIT = 128;
   private short[] blocks;
   private byte dim;
@@ -112,6 +113,7 @@ public class Board {
     short[] blocksCopy = new short[this.blocks.length];
     System.arraycopy(this.blocks, 0, blocksCopy, 0, this.blocks.length);
 
+    if (DEBUG) System.out.println("elem1="+elem1+",elem2="+elem2);
     short tempValue = blocksCopy[elem1];
     blocksCopy[elem1] = blocksCopy[elem2];
     blocksCopy[elem2] = tempValue;
@@ -131,18 +133,23 @@ public class Board {
 
     short row = (short)((pos-1)/dim);
     short col = (short)((pos-1)%dim);
+    if (DEBUG) System.out.println("pos="+pos+", row="+row+", col="+col+", dim="+dim);
 
     if (row > 0) {
-      q.enqueue(new Board(dim, swapElems((short)(pos-1), pos)));
-    }
-    if (row < (dim-1)) {
-      q.enqueue(new Board(dim, swapElems(pos, (short)(pos+1))));
-    }
-    if (col > 0) {
+      if (DEBUG) System.out.println("if (row > 0)");
       q.enqueue(new Board(dim, swapElems((short)(pos-dim), pos)));
     }
-    if (col < (dim-1)) {
+    if (row < (dim-1)) {
+      if (DEBUG) System.out.println("if (row < (dim-1))");
       q.enqueue(new Board(dim, swapElems(pos, (short)(pos+dim))));
+    }
+    if (col > 0) {
+      if (DEBUG) System.out.println("if (col > 0)");
+      q.enqueue(new Board(dim, swapElems((short)(pos-1), pos)));
+    }
+    if (col < (dim-1)) {
+      if (DEBUG) System.out.println("if (col < (dim-1))");
+      q.enqueue(new Board(dim, swapElems(pos, (short)(pos+1))));
     }
 		return q;
   }

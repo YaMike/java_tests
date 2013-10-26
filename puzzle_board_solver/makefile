@@ -1,11 +1,12 @@
-SRC=Board.java Solver.java
+SRC=Board.java Solver.java PuzzleChecker.java
 OBJS=$(subst .java,.class,$(SRC))
 TARG=$(subst .class,,$(OBJS))
 CC=javac
 RUN=java
+ZSRC=$(filter-out PuzzleChecker.java,$(SRC))
 ZARCH=puzzle.zip
 TESTARCHNAME=8puzzle-testing
-EXTCLASSES=StdIn StdOut StdRandom StdStats StdArrayIO In StdDraw Queue
+EXTCLASSES=StdIn StdOut StdRandom StdStats StdArrayIO In StdDraw Queue MinPQ Stack
 
 all: prepare_libs $(OBJS) prepare_tests
 
@@ -44,5 +45,5 @@ zip:
 	@echo "Switching off debug mode..."
 	@sed -i 's/DEBUG=true/DEBUG=false/' $(SRC)
 	@echo "Creating *.zip archive..."
-	@zip ~/$(ZARCH)
+	@zip ~/$(ZARCH) $(ZSRC)
 	@echo "~/$(ZARCH) has been created."
