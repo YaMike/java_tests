@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class Board {
-  private boolean DEBUG = false;
+  private static final boolean DEBUG = false;
   private static int DIM_LIMIT = 128;
   private short[] blocks;
   private byte dim;
@@ -26,7 +26,7 @@ public class Board {
     this.dim = (byte)blocks.length;
   }
 
-	public Board(byte dim, short[] blocks) {
+	private Board(byte dim, short[] blocks) {
 		this.blocks = blocks;
     this.dim = dim;
 	}
@@ -154,7 +154,7 @@ public class Board {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("%d\n", dim));
 		short size = (short)(dim*dim);
-    for (short i = 1; i < size; i++) {
+    for (short i = 1; i <= size; i++) {
 			sb.append(String.format("%2d%s", blocks[i], i % dim == 0 ? "\n" : " "));
     }
 		return sb.toString();
