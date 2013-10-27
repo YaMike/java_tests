@@ -1,4 +1,4 @@
 java_algs
 =========
 
-Java/Algo classes
+coursera.org: Algorithms Part I
