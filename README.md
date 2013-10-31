@@ -1,2 +1,2 @@
-java_algs
-=========
+java_tests
+==========
