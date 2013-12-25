@@ -14,12 +14,13 @@ all: $(OBJS)
 .PHONY:
 
 tests:
-	@rm -rf $(BIN); 
+	@rm -rf $(BIN);
+	@make all
 
 clean:
 	@echo "Removing $(OBJS)..."
 	@rm -f $(OBJS)
-	@rm -rf *.class $(BIN)
+	@rm -rf *.class $(BIN) *output.txt
 
 run: tests
 	@echo "****************************************************************"
