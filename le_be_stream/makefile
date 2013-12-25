@@ -3,7 +3,7 @@ OBJS=$(subst .java,.class,$(SRC))
 TARG=$(subst .class,,$(OBJS))
 CC=javac
 RUN=java
-BIN=test
+BIN=test 
 
 all: $(OBJS)
 
