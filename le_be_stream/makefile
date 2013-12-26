@@ -30,3 +30,8 @@ clean:
 	@rm -f $(OBJS)
 	@rm -rf *.class $(BIN) *output.txt
 
+commit:
+	@make clean
+	@git add *
+	@git commit
+

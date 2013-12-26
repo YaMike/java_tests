@@ -8,18 +8,8 @@ import java.lang.Exception;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-
-class LittleEndianDataInputStream extends DataInputStream {
-	LittleEndianDataInputStream(InputStream is) {
-		super(is);
-	}
-}
-
-class LittleEndianDataOutputStream extends DataOutputStream {
-	LittleEndianDataOutputStream(OutputStream os) {
-		super(os);
-	}
-}
+import com.tronservice.lestreams.LittleEndianDataOutputStream;
+import com.tronservice.lestreams.LittleEndianDataInputStream;
 
 public class test {
 	public static String IFileName = "input.txt";
