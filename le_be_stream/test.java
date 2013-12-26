@@ -48,8 +48,15 @@ public class test {
 
 
 		try {
-			dos.writeInt(dis.readInt());
-			ledos.writeInt(ledis.readInt());
+			int leValue = ledis.readInt(),
+					beValue = dis.readInt();
+
+			System.out.println(String.format("Little endian value =\t0x%08X\n"+
+																			 "Big endian value =\t0x%08X\n", leValue, beValue));
+
+			ledos.writeInt(leValue);
+			dos.writeInt(beValue);
+
 		} catch (IOException e) {
 			System.err.println("Cannot read/write streams!");
 		}

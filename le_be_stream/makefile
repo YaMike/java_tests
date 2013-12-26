@@ -19,6 +19,11 @@ tests:
 	@echo "****************************************************************"
 	@$(RUN) $(BIN)
 	@echo "****************************************************************"
+	@echo "Big endian output:"
+	hexdump output.txt
+	@echo "Little endian output:"
+	hexdump le_output.txt
+	@echo "****************************************************************"
 
 clean:
 	@echo "Removing $(OBJS)..."
