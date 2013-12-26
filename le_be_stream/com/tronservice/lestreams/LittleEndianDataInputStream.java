@@ -1,4 +1,4 @@
-package lestreams;
+package com.tronservice.lestreams;
 
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -54,6 +54,7 @@ public class LittleEndianDataInputStream extends FilterInputStream implements Da
 	public final int readInt() throws IOException {
 		byte[] b = new byte[2];
 		((DataInputStream) in).readFully(b, 0, 4);
+		System.out.println(b);
 		return ((b[3] & 0xff) << 24) |
 					 ((b[2] & 0xff) << 16) |
 					 ((b[1] & 0xff) <<  8) |
