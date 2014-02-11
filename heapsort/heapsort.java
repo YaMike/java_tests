@@ -28,9 +28,9 @@ public class heapsort {
       System.err.println("Bad arguments!");
       return;
     }
-    System.out.println("Generating random data array of size " + data.length + " with Fisher-Yates algorithm...");
     MaxHeap mh = new MaxHeap(data);
     if (DEBUG) {
+      System.out.println("Generating random data array of size " + data.length + " with Fisher-Yates algorithm...");
       System.out.println("Before: " + mh);
     }
     long start = System.nanoTime();
@@ -39,7 +39,7 @@ public class heapsort {
     if (DEBUG) {
       System.out.println("After:  " + mh);
     }
-    System.out.println("Time("+data.length+"):  " + elapsed + " nsecs");
+    System.out.println("Time("+data.length+"):\t" + elapsed + " nsecs");
   }
 }
 
