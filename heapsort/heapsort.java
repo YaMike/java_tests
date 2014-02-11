@@ -39,7 +39,7 @@ public class heapsort {
     if (DEBUG) {
       System.out.println("After:  " + mh);
     }
-    System.out.println("Time("+data.length+"):\t" + elapsed + " nsecs");
+    System.out.println("Time ("+data.length+"):\t\t" + elapsed + " nsecs");
   }
 }
 
