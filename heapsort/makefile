@@ -13,6 +13,7 @@ all: $(OBJS)
 .PHONY:
 
 run:
+	@echo "Start testing"
 	@CNT=10; for i in `seq 1 6`;\
 		do\
 		CNT=$$(($$CNT*10));\
