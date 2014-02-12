@@ -3,7 +3,7 @@ import java.lang.ArrayIndexOutOfBoundsException;
 import java.lang.Comparable;
 
 public class heapsort {
-  public static boolean DEBUG = false;
+  public static boolean DEBUG=false;
 
   public static Integer[] genData(int size) {
     Integer[] data = new Integer[size];

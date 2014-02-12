@@ -25,7 +25,11 @@ clean:
 	@echo "Removing $(OBJS).."
 	@rm -f $(OBJS) *.class
 
-turn_debug:
+debug:
 	@echo "Switching on debug mode..."
 	@sed -i 's/DEBUG=false/DEBUG=true/' $(SRC)
+
+nodebug:
+	@echo "Switching off debug mode..."
+	@sed -i 's/DEBUG=true/DEBUG=false/' $(SRC)
 
