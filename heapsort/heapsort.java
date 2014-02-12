@@ -1,11 +1,12 @@
 import java.util.Arrays;
 import java.lang.ArrayIndexOutOfBoundsException;
+import java.lang.Comparable;
 
 public class heapsort {
   public static boolean DEBUG = false;
 
-  public static int[] genData(int size) {
-    int[] data = new int[size];
+  public static Integer[] genData(int size) {
+    Integer[] data = new Integer[size];
     for (int i = 0; i < size; i++) {
       data[i] = i;
     }
@@ -21,14 +22,14 @@ public class heapsort {
   }
 
   public static void main(String[] args) {
-    int[] data;
+    Integer[] data;
     try {
       data = genData(Integer.parseInt(args[0]));
     } catch (ArrayIndexOutOfBoundsException e) {
       System.err.println("Bad arguments!");
       return;
     }
-    MaxHeap mh = new MaxHeap(data);
+    MaxHeap<Integer> mh = new MaxHeap<Integer>(data);
     if (DEBUG) {
       System.out.println("Generating random data array of size " + data.length + " with Fisher-Yates algorithm...");
       System.out.println("Before: " + mh);
@@ -43,9 +44,10 @@ public class heapsort {
   }
 }
 
-class MaxHeap {
-  public MaxHeap(int[] A) {
-    this.A = new int[A.length];
+class MaxHeap<T extends Comparable<? super T>> {
+
+  public MaxHeap(T[] A) {
+    this.A = (T[])new Object[A.length];
     System.arraycopy(A,0,this.A,0,A.length);
   }
 
@@ -74,16 +76,16 @@ class MaxHeap {
     int largest = i;
 
     //System.out.println("i=" + i + ", data: " + this);
-    if (l < A.length && A[l] > A[i]) {
+    if (l < A.length && A[l].compareTo(A[i]) > 0) {
       largest = l;
     }
 
-    if (r < A.length && A[r] > A[largest]) {
+    if (r < A.length && A[r].compareTo(A[largest]) > 0) {
       largest = r;
     }
 
     if (largest != i) {
-      int temp = A[i];
+      T temp = A[i];
       A[i] = A[largest];
       A[largest] = temp;
       maxHeapify(largest);
@@ -95,5 +97,5 @@ class MaxHeap {
     return new String(Arrays.toString(this.A));
   }
 
-  private int[] A;
+  private T[] A;
 }
