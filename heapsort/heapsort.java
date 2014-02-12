@@ -47,7 +47,7 @@ public class heapsort {
 class MaxHeap<T extends Comparable<? super T>> {
 
   public MaxHeap(T[] A) {
-    this.A = (T[])new Object[A.length];
+    this.A = A;
     System.arraycopy(A,0,this.A,0,A.length);
   }
 
