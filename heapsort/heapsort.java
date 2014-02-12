@@ -29,14 +29,17 @@ public class heapsort {
       System.err.println("Bad arguments!");
       return;
     }
+
     MaxHeap<Integer> mh = new MaxHeap<Integer>(data);
     if (DEBUG) {
       System.out.println("Generating random data array of size " + data.length + " with Fisher-Yates algorithm...");
       System.out.println("Before: " + mh);
     }
+
     long start = System.nanoTime();
     mh.BuildHeap();
     long elapsed = System.nanoTime() - start;
+
     if (DEBUG) {
       System.out.println("After:  " + mh);
     }
@@ -75,7 +78,6 @@ class MaxHeap<T extends Comparable<? super T>> {
 
     int largest = i;
 
-    //System.out.println("i=" + i + ", data: " + this);
     if (l < A.length && A[l].compareTo(A[i]) > 0) {
       largest = l;
     }
