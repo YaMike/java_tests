@@ -38,11 +38,15 @@ public class heapsort {
 
     long start = System.nanoTime();
     mh.BuildHeap();
+    if (DEBUG) {
+      System.out.println("After BuildHeap:  " + mh);
+    }
+		mh.GetSortedArray();
+    if (DEBUG) {
+      System.out.println("After unwrapping heap:  " + mh);
+    }
     long elapsed = System.nanoTime() - start;
 
-    if (DEBUG) {
-      System.out.println("After:  " + mh);
-    }
     System.out.println("Time ("+data.length+"):\t\t" + elapsed + " nsecs");
   }
 }
@@ -50,15 +54,29 @@ public class heapsort {
 class MaxHeap<T extends Comparable<? super T>> {
 
   public MaxHeap(T[] A) {
+		this.sz = A.length;
     this.A = A;
-    System.arraycopy(A,0,this.A,0,A.length);
   }
 
-  public void BuildHeap() {
-    for (int i = A.length/2-1; i >= 0; i--) {
-      maxHeapify(i);
+	public void BuildHeap() {
+		BuildHeap(A.length);
+	}
+
+  public void BuildHeap(int size) {
+    for (int i = size/2-1; i >= 0; i--) {
+      maxHeapify(i, size);
     }
   }
+
+	public T[] GetSortedArray() {
+		for (int i = A.length-1; i > 0; i--) {
+			T last = A[0];
+			A[0] = A[i];
+			A[i] = last;
+			BuildHeap(i);
+		}
+		return A;
+	}
 
   private int heapLeft(int i) {
     return 2*i;
@@ -72,17 +90,17 @@ class MaxHeap<T extends Comparable<? super T>> {
     return i/2;
   }
 
-  private void maxHeapify(int i) {
+  private void maxHeapify(int i, int size) {
     int l = heapLeft(i),
         r = heapRigth(i);
 
     int largest = i;
 
-    if (l < A.length && A[l].compareTo(A[i]) > 0) {
+    if (l < size && A[l].compareTo(A[i]) > 0) {
       largest = l;
     }
 
-    if (r < A.length && A[r].compareTo(A[largest]) > 0) {
+    if (r < size && A[r].compareTo(A[largest]) > 0) {
       largest = r;
     }
 
@@ -90,7 +108,7 @@ class MaxHeap<T extends Comparable<? super T>> {
       T temp = A[i];
       A[i] = A[largest];
       A[largest] = temp;
-      maxHeapify(largest);
+      maxHeapify(largest, size);
     }
   }
 
@@ -100,4 +118,5 @@ class MaxHeap<T extends Comparable<? super T>> {
   }
 
   private T[] A;
+	private int sz;
 }
