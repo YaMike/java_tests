@@ -36,19 +36,12 @@ public class quickmedian {
     }
 
     QuickMedian<Integer> qm = new QuickMedian<Integer>(data);
-    if (DEBUG) {
-      System.out.println("Generating random data array of size " + data.length + " with Fisher-Yates algorithm...");
-      System.out.println("Before: " + qm);
-    }
-
+																																							 if (DEBUG) { System.out.println("Generating random data array of size " + data.length + " with Fisher-Yates algorithm..."); System.out.println("Before: " + qm); }
     long start = System.nanoTime();
     int median = qm.findMedian();
-    if (DEBUG) {
-      System.out.println("After median search:  " + qm);
-    }
+																																							 if (DEBUG) { System.out.println("After median search:  " + qm); }
     long elapsed = System.nanoTime() - start;
     System.out.println("Median = " + median);
-
     System.out.println("Time ("+data.length+"):\t\t" + elapsed + " nsecs");
   }
 }
@@ -72,9 +65,9 @@ class QuickMedian<T extends Comparable<? super T>> {
     if (l == r) {
       return A[l];
     }
-    if (DEBUG) System.out.println(this.toString());
+																																							 if (DEBUG) System.out.println(this.toString());
     int pivot = randomizedPartition(l,r);
-    if (DEBUG) System.out.println("l = " + l + ", r = " + r + ", pivot = " + pivot);
+																																							 if (DEBUG) System.out.println("l = " + l + ", r = " + r + ", pivot = " + pivot);
     if (order == pivot) {
       return A[pivot];
     } else
@@ -92,9 +85,9 @@ class QuickMedian<T extends Comparable<? super T>> {
   }
 
   private int randomizedPartition(int l, int r) {
-		if (DEBUG) System.out.println("l="+l+",r="+r);
+																																							 if (DEBUG) System.out.println("l="+l+",r="+r);
     int pivot = rand.nextInt(r-l+1) + l;
-    if (DEBUG) System.out.println("pivot = " + pivot + ", A[pivot] = " + A[pivot]);
+																																							 if (DEBUG) System.out.println("pivot = " + pivot + ", A[pivot] = " + A[pivot]);
     swap(r,pivot);
     return Partition(l,r,pivot);
   }
@@ -102,15 +95,15 @@ class QuickMedian<T extends Comparable<? super T>> {
   private int Partition(int l, int r, int pivot) {
     T t = A[r];
     int i = l, j = l-1;
-    if (DEBUG) System.out.println("swap:l="+l+",r="+r+":" + this.toString());
+																																							 if (DEBUG) System.out.println("swap:l="+l+",r="+r+":" + this.toString());
     for ( ; i < r; i++) {
       if (A[i].compareTo(t) <= 0) {
         swap(i,++j);
-        if (DEBUG) System.out.println("swap: ["+i+"<->"+j+"]:" + this.toString());
+																																							 if (DEBUG) System.out.println("swap: ["+i+"<->"+j+"]:" + this.toString());
       }
     }
     swap(j+1,r);
-    if (DEBUG) System.out.println("swap: return="+(j+1)+":" + this.toString());
+																																							 if (DEBUG) System.out.println("swap: return="+(j+1)+":" + this.toString());
     return j+1;
   }
   @Override
