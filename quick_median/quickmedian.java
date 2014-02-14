@@ -28,21 +28,24 @@ public class quickmedian {
 
   public static void main(String[] args) {
     Integer[] data;
+		long start, end;
+		start = System.nanoTime()/1000;
     try {
       data = genData(Integer.parseInt(args[0]));
     } catch (ArrayIndexOutOfBoundsException e) {
       System.err.println("Bad arguments!");
       return;
     }
+		end = System.nanoTime()/1000;
+		System.out.println("Generating " + data.length + " numbers\nGenerating took " + (end - start) + " usecs");
 
     QuickMedian<Integer> qm = new QuickMedian<Integer>(data);
 																																							 if (DEBUG) { System.out.println("Generating random data array of size " + data.length + " with Fisher-Yates algorithm..."); System.out.println("Before: " + qm); }
-    long start = System.nanoTime();
+    start = System.nanoTime()/1000;
     int median = qm.findMedian();
-																																							 if (DEBUG) { System.out.println("After median search:  " + qm); }
-    long elapsed = System.nanoTime() - start;
+    end = System.nanoTime()/1000;
     System.out.println("Median = " + median);
-    System.out.println("Time ("+data.length+"):\t\t" + elapsed + " nsecs");
+    System.out.println("Running time: " + (end - start) + " usecs");
   }
 }
 
