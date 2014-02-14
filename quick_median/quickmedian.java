@@ -54,6 +54,7 @@ public class quickmedian {
 }
 
 class QuickMedian<T extends Comparable<? super T>> {
+	private static boolean DEBUG=false;
 
   private T[] A;
   private Random rand;
@@ -67,21 +68,20 @@ class QuickMedian<T extends Comparable<? super T>> {
     return findMedian(0, A.length-1, (A.length-1)/2);
   }
 
-  public T findMedian(int l, int r, int kth) {
+  public T findMedian(int l, int r, int order) {
     if (l == r) {
       return A[l];
     }
-    System.out.println(this.toString());
-    int pivot = randomizedPartition(l,r),
-        k = pivot - l;
-    System.out.println("l = " + l + ", r = " + r + ", pivot = " + pivot);
-    if (kth == k) {
-      return A[k];
+    if (DEBUG) System.out.println(this.toString());
+    int pivot = randomizedPartition(l,r);
+    if (DEBUG) System.out.println("l = " + l + ", r = " + r + ", pivot = " + pivot);
+    if (order == pivot) {
+      return A[pivot];
     } else
-    if (kth < k) {
-      return findMedian(l,pivot-1,kth);
+    if (order < pivot) {
+      return findMedian(l,pivot-1,order);
     } else {
-      return findMedian(pivot+1,r,kth-pivot-1);
+      return findMedian(pivot+1,r,order);
     }
   }
 
@@ -92,26 +92,26 @@ class QuickMedian<T extends Comparable<? super T>> {
   }
 
   private int randomizedPartition(int l, int r) {
+		if (DEBUG) System.out.println("l="+l+",r="+r);
     int pivot = rand.nextInt(r-l+1) + l;
-    System.out.println("pivot = " + pivot + ", A[pivot] = " + A[pivot]);
+    if (DEBUG) System.out.println("pivot = " + pivot + ", A[pivot] = " + A[pivot]);
     swap(r,pivot);
     return Partition(l,r,pivot);
   }
 
   private int Partition(int l, int r, int pivot) {
     T t = A[r];
-    int i = l, j = l;
-    System.out.println("swap:l="+l+",r="+r+":" + this.toString());
+    int i = l, j = l-1;
+    if (DEBUG) System.out.println("swap:l="+l+",r="+r+":" + this.toString());
     for ( ; i < r; i++) {
-      System.out.println("i="+i+",j="+j);
       if (A[i].compareTo(t) <= 0) {
-        swap(i,j++);
-        System.out.println("swap: ["+i+"<->"+(j-1)+"]:" + this.toString());
+        swap(i,++j);
+        if (DEBUG) System.out.println("swap: ["+i+"<->"+j+"]:" + this.toString());
       }
     }
-    swap(j,r);
-    System.out.println("swap: return="+j+":" + this.toString());
-    return j;
+    swap(j+1,r);
+    if (DEBUG) System.out.println("swap: return="+(j+1)+":" + this.toString());
+    return j+1;
   }
   @Override
   public String toString() {
