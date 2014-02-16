@@ -5,12 +5,18 @@ JAVA_CC=javac
 JAVA_RUN=java
 
 C_SRC=quickmedian.c
-C_RUN=quickmedian
+C_RUN=quickmedian_c
 C_CC=gcc
 C_CFLAGS=-O3 -std=c99
 C_LDFLAGS=
 
-all: $(JAVA_OBJS) $(C_RUN)
+CPP_SRC=quickmedian.cpp
+CPP_RUN=quickmedian_cpp
+CPP_CC=g++
+CPP_CFLAGS=-O3 -std=c++11
+CPP_LDFLAGS=
+
+all: $(JAVA_OBJS) $(C_RUN) $(CPP_RUN)
 
 %.class:%.java
 	@echo "Compiling \"$<\"..."
@@ -19,6 +25,10 @@ all: $(JAVA_OBJS) $(C_RUN)
 $(C_RUN):
 	@echo "Compiling \"$(C_RUN)\"..."
 	@$(C_CC) $(C_CFLAGS) -o $(C_RUN) $(C_SRC) $(C_LDFLAGS)
+
+$(CPP_RUN):
+	@echo "Compiling \"$(CPP_RUN)\"..."
+	@$(CPP_CC) $(CPP_CFLAGS) -o $(CPP_RUN) $(CPP_SRC) $(CPP_LDFLAGS)
 
 .PHONY:
 
@@ -31,6 +41,8 @@ run:
 		$(JAVA_RUN) $(JAVA_TARG) $$CNT;\
 		echo "C:";\
 		./$(C_RUN) $$CNT;\
+		echo "C++:";\
+		./$(CPP_RUN) $$CNT;\
 		echo "";\
 		done;\
 
@@ -38,12 +50,17 @@ clean:
 	@echo "Removing $(JAVA_OBJS), $(C_RUN).."
 	@rm -f $(JAVA_OBJS) *.class
 	@rm -f $(C_RUN)
+	@rm -f $(CPP_RUN)
 
 debug:
 	@echo "Switching on debug mode..."
 	@sed -i 's/DEBUG=false/DEBUG=true/' $(JAVA_SRC)
+	@sed -i 's/DEBUG=false/DEBUG=true/' $(C_SRC)
+	@sed -i 's/DEBUG=false/DEBUG=true/' $(CPP_SRC)
 
 nodebug:
 	@echo "Switching off debug mode..."
 	@sed -i 's/DEBUG=true/DEBUG=false/' $(JAVA_SRC)
+	@sed -i 's/DEBUG=true/DEBUG=false/' $(C_SRC)
+	@sed -i 's/DEBUG=true/DEBUG=false/' $(CPP_SRC)
 
