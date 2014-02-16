@@ -8,7 +8,7 @@
  *        Version:  1.0
  *        Created:  02/14/2014 04:44:03 PM
  *       Revision:  none
- *       Compiler:  g++
+ *       Compiler:  g++ (g++ -o test quickmedian.cpp -std=c++11 2>&1; ./test 200)
  *
  *         Author:  Michael Likholet <m.likholet@ya.ru>
  *        Company:  -
