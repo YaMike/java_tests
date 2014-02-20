@@ -45,7 +45,7 @@ static void swap_ints(int *data, int i, int j) {
 
 static long timespec_diff_us(struct timespec *start, struct timespec *end) {
 	return (end->tv_sec*1000000+end->tv_nsec/1000) -
-				 (start->tv_sec*1000000+start->tv_nsec/1000);
+		(start->tv_sec*1000000+start->tv_nsec/1000);
 }
 
 static int *alloc_random_data(int sz) {
@@ -73,10 +73,10 @@ static int *alloc_random_data(int sz) {
 #define RETURN_VALUE (!RETURN_IDX)
 int compute_median_of_five(int *data, int l) {
 	register int	a = data[l],	 a_idx = l,
-								b = data[l+1], b_idx = l+1,
-								c = data[l+2], c_idx = l+2,
-								d = data[l+3], d_idx = l+3,
-								e = data[l+4], e_idx = l+4;
+					 b = data[l+1], b_idx = l+1,
+					 c = data[l+2], c_idx = l+2,
+					 d = data[l+3], d_idx = l+3,
+					 e = data[l+4], e_idx = l+4;
 
 	if (a < b) { 
 		register int t = a; a = b; b = t;			// exchange a && b
@@ -191,7 +191,7 @@ int find_median(int *data, int l, int r, int sz) {
 }
 
 int main(int argc, char *argv[]) {
-	
+
 	struct timespec start, end;
 	int sz = 0, *data = NULL;
 
