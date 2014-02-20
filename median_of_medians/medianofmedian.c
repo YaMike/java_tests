@@ -3,7 +3,7 @@
  *
  *       Filename:  linearmedian.c
  *
- *    Description:  Linear-time median (median of medians algorithm)
+ *    Description:  median of medians algorithm
  *
  *        Version:  1.0
  *        Created:  02/18/2014 01:24:37 PM
@@ -25,6 +25,9 @@
 #include <time.h>
 #include <sys/types.h>
 
+#define DEBUG 0
+
+#if DEBUG == 1
 static void print_data(char *name, int *data, int sz) {
 	printf("%s: [", name);
 	for (int i = 0; i < sz; i++) {
@@ -32,6 +35,7 @@ static void print_data(char *name, int *data, int sz) {
 	}
 	printf("]\n");
 }
+#endif
 
 static void swap_ints(int *data, int i, int j) {
 	int temp = data[i];
