@@ -1,7 +1,8 @@
-JAVA_SRC=quickmedian.java
+JAVA_SRC=medianofmedians.java
 JAVA_OBJS=$(subst .java,.class,$(JAVA_SRC))
 JAVA_TARG=$(subst .class,,$(JAVA_OBJS))
 JAVA_CC=javac
+JAVA_CFLAGS=-classpath ../support_java_classes
 JAVA_RUN=java
 
 C_SRC=medianofmedians.c
@@ -10,18 +11,18 @@ C_CC=gcc
 C_CFLAGS=-O3 -std=c99
 C_LDFLAGS=
 
-CPP_SRC=quickmedian.cpp
-CPP_RUN=quickmedian_cpp
+CPP_SRC=medianofmedians.cpp
+CPP_RUN=medianofmedians_cpp
 CPP_CC=g++
 CPP_CFLAGS=-O3 -std=c++11
 CPP_LDFLAGS=
 
 #all: $(JAVA_OBJS) $(C_RUN) $(CPP_RUN)
-all: $(C_RUN)
+all: $(C_RUN) $(JAVA_OBJS)
 
 %.class:%.java
 	@echo "Compiling \"$<\"..."
-	@$(JAVA_CC) -Xlint $<
+	@$(JAVA_CC) $(JAVA_CFLAGS) -Xlint $<
 
 $(C_RUN):
 	@echo "Compiling \"$(C_RUN)\"..."

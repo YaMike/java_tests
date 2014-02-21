@@ -27,15 +27,15 @@
 
 #define DEBUG 0
 
-#if DEBUG == 1
 static void print_data(char *name, int *data, int sz) {
+#if DEBUG == 1
 	printf("%s: [", name);
 	for (int i = 0; i < sz; i++) {
 		printf("%d ", data[i]);
 	}
 	printf("]\n");
-}
 #endif
+}
 
 static void swap_ints(int *data, int i, int j) {
 	int temp = data[i];
