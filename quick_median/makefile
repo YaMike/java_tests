@@ -30,7 +30,7 @@ $(CPP_RUN):
 	@echo "Compiling \"$(CPP_RUN)\"..."
 	@$(CPP_CC) $(CPP_CFLAGS) -o $(CPP_RUN) $(CPP_SRC) $(CPP_LDFLAGS)
 
-.PHONY:
+.PHONY: all run clean debug release
 
 run:
 	@echo "Start testing..."
@@ -58,7 +58,7 @@ debug:
 	@sed -i 's/DEBUG=false/DEBUG=true/' $(C_SRC)
 	@sed -i 's/DEBUG=false/DEBUG=true/' $(CPP_SRC)
 
-nodebug:
+release:
 	@echo "Switching off debug mode..."
 	@sed -i 's/DEBUG=true/DEBUG=false/' $(JAVA_SRC)
 	@sed -i 's/DEBUG=true/DEBUG=false/' $(C_SRC)
