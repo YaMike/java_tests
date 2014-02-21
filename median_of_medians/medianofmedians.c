@@ -77,15 +77,15 @@ int compute_median_of_five(int *data, int l) {
 					 d = data[l+3], d_idx = l+3,
 					 e = data[l+4], e_idx = l+4;
 
-	if (a < b) { 
+	if (a > b) { 
 		register int t = a; a = b; b = t;			// exchange a && b
 		t = a_idx; a_idx = b_idx; b_idx = t;	// exchange a_idx && b_idx
 	}
-	if (d < e) {
+	if (d > e) {
 		register int t = d; d = e; e = t;			// exchange d && e
 		t = d_idx; d_idx = e_idx; e_idx = t;	// exchange d_idx && e_idx
 	}
-	if (a < d) { 
+	if (a > d) { 
 		register int t;
 		t = a; a = d; d = t;									// exchange a && d
 		t = a_idx; a_idx = d_idx; d_idx = t;	// exchange a_idx && d_idx
