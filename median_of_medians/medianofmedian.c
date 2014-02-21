@@ -66,7 +66,6 @@ static int *alloc_random_data(int sz) {
 	return data;
 }
 
-//TODO: fix return value - must be index, not value
 #define TRUE	1
 #define FALSE	0
 #define RETURN_IDX	TRUE
