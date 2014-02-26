@@ -22,7 +22,7 @@ import java.lang.Exception;
 import javatest.util.RandomData;
 
 class MedianOfMedians {
-	public static boolean DEBUG=true;
+	public static boolean DEBUG=false;
 
 	public static void main(String[] args) {
 		long start, stop;
@@ -52,7 +52,7 @@ class MedianOfMedians {
 }
 
 class MedianSelection<T extends Comparable<? super T>> {
-	private static boolean DEBUG=true;
+	private static boolean DEBUG=false;
 	private T[] A;
 	private Random rand;
 
