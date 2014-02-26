@@ -11,13 +11,6 @@ C_CC=gcc
 C_CFLAGS=-O3 -std=c99
 C_LDFLAGS=
 
-CPP_SRC=medianofmedians.cpp
-CPP_RUN=medianofmedians_cpp
-CPP_CC=g++
-CPP_CFLAGS=-O3 -std=c++11
-CPP_LDFLAGS=
-
-#all: $(JAVA_OBJS) $(C_RUN) $(CPP_RUN)
 all: $(C_RUN) $(JAVA_OBJS)
 
 %.class:%.java
@@ -43,8 +36,6 @@ run:
 		$(JAVA_RUN) $(JAVA_TARG) $$CNT;\
 		echo "C:";\
 		./$(C_RUN) $$CNT;\
-		echo "C++:";\
-		./$(CPP_RUN) $$CNT;\
 		echo "";\
 		done;\
 
@@ -52,17 +43,14 @@ clean:
 	@echo "Removing $(JAVA_OBJS), $(C_RUN).."
 	@rm -f $(JAVA_OBJS) *.class
 	@rm -f $(C_RUN)
-	@rm -f $(CPP_RUN)
 
 debug:
 	@echo "Switching on debug mode..."
 	@sed -i 's/DEBUG=false/DEBUG=true/' $(JAVA_SRC)
 	@sed -i 's/DEBUG=false/DEBUG=true/' $(C_SRC)
-	@sed -i 's/DEBUG=false/DEBUG=true/' $(CPP_SRC)
 
 release:
 	@echo "Switching off debug mode..."
 	@sed -i 's/DEBUG=true/DEBUG=false/' $(JAVA_SRC)
 	@sed -i 's/DEBUG=true/DEBUG=false/' $(C_SRC)
-	@sed -i 's/DEBUG=true/DEBUG=false/' $(CPP_SRC)
 
