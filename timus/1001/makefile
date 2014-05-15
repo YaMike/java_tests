@@ -10,7 +10,7 @@ all:
 	$(MAKE) run
 
 run:
-	./$(BIN) < $(INPUT) > $(TEST_OUTPUT)
+	time ./$(BIN) < $(INPUT) > $(TEST_OUTPUT)
 	diff $(TEST_OUTPUT) $(OUTPUT)
 	@[ $$? -eq 0 ] && echo "Succeded" || "Fail"
 
