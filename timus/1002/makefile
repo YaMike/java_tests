@@ -13,7 +13,7 @@ all:
 run:
 	time ./$(BIN) < $(INPUT) > $(TEST_OUTPUT)
 	diff $(TEST_OUTPUT) $(OUTPUT)
-	@[ $$? -eq 0 ] && echo "Succeded" || "Fail"
+	@[ $$? -eq 0 ] && echo "Succeded" || echo "Failed"
 
 .PHONY: clean
 
