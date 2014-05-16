@@ -39,10 +39,6 @@ struct Test {
 int main(int argc, char *argv[]) {
 	vector<Test> tests;
 
-#ifdef DEBUG
-	cout << "reading data" << endl;
-#endif
-
 	while (!cin.eof()) {
 		int64_t number;
 		cin >> number;
