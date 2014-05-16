@@ -11,7 +11,7 @@ import java.io.IOException;
 import com.tronservice.lestreams.LittleEndianDataOutputStream;
 import com.tronservice.lestreams.LittleEndianDataInputStream;
 
-public class test {
+public class LittleEndianStreamsTest {
 	public static String IFileName = "input.txt";
 	public static String OFileName = "output.txt";
 	public static String leOFileName = "le_output.txt";

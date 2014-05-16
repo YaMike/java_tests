@@ -52,7 +52,7 @@ public class LittleEndianDataInputStream extends FilterInputStream implements Da
 
 	@Override
 	public final int readInt() throws IOException {
-		byte[] b = new byte[4];
+		byte[] b = new byte[2];
 		((DataInputStream) in).readFully(b, 0, 4);
 		System.out.println(b);
 		return ((b[3] & 0xff) << 24) |

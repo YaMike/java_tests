@@ -3,9 +3,9 @@ OBJS=$(subst .java,.class,$(SRC))
 TARG=$(subst .class,,$(OBJS))
 CC=javac
 RUN=java
-BIN=test 
+BIN=LittleEndianStreamsTest
 
-all: $(OBJS)
+all: $(OBJS) run
 
 %.class:%.java
 	@echo "Compiling..."
@@ -13,9 +13,11 @@ all: $(OBJS)
 
 .PHONY:
 
+run:
+	@make tests
+
 tests:
 	@rm -rf $(BIN);
-	@make all
 	@echo "****************************************************************"
 	@$(RUN) $(BIN)
 	@echo "****************************************************************"
@@ -26,7 +28,7 @@ tests:
 	@echo "****************************************************************"
 
 clean:
-	@echo "Removing $(OBJS)..."
+	@echo "Removing $(OBJS), $(PKG)..."
 	@rm -f $(OBJS)
 	@rm -rf *.class $(BIN) *output.txt
 
