@@ -62,7 +62,7 @@ struct Test {
 
 	void process() {
 #ifdef DEBUG
-		cout << "processing " << number << endl; 
+		cout << "processing: " << number << endl; 
 #endif
 		/* criterea:
 		 * - length (exactly words_count syms/nums)
@@ -79,6 +79,7 @@ struct Test {
 				this->pos = pos;
 				this->word = word;
 				this->idx = idx;
+        this->prev = prev;
 			};
 			~Node() {
 				for (vector<Node*>::iterator it = next.begin(); it != next.end(); ++it) {
@@ -91,10 +92,11 @@ struct Test {
 		vector<string> words_num;
 		words_num.reserve(words.size());
 
-		cout << "Convert to words num:" << endl;
 		for (vector<string>::iterator it = words.begin(); it != words.end(); it++) {
 			words_num.push_back(toNumberString(*it));
-			cout << words_num.back() << endl;
+#ifdef DEBUG
+			cout << words_num.back() << ":" << *it << endl;
+#endif
 		}
 
 		list<Node*> active_nodes;
@@ -106,7 +108,7 @@ struct Test {
 		uint32_t idx = 0;
 		for (vector<string>::const_iterator words_it = words_num.cbegin(); words_it != words_num.cend(); words_it++, idx++) {
 			if (words_it->compare(0, words_it->size(), str_number,0,words_it->size()) == 0) {
-				Node *node = new Node(&result_head, 0, *words_it, idx++);
+				Node *node = new Node(&result_head, words_it->size(), *words_it, idx++);
 				active_nodes.push_back(node);
 				result_head.next.push_back(node);
 			}
@@ -136,7 +138,7 @@ struct Test {
 
 		/* remove incomplete branches (total lenght of branch is smaller than "str_number" */
 		Node *minimum_size_end_node = NULL;
-		int min_size = str_number.size();
+		uint32_t min_size = str_number.size();
 		for (list<Node*>::iterator it = last_nodes.begin(); it != last_nodes.end(); it++) {
 			Node *last_node = *it;
 			if (last_node->pos != str_number.size()) {
@@ -158,7 +160,7 @@ struct Test {
 			} else {
 				/* find shortest branch */
 				Node *prev = last_node->prev;
-				int size = 0;
+				uint32_t size = 0;
 				while (prev != NULL) {
 					size++;
 					prev = prev->prev;
@@ -171,19 +173,19 @@ struct Test {
 		}
 	
 		/* print result */
-		cout << "minimum is " << min_size << endl;
-		Node *prev = minimum_size_end_node;
-		vector<string> result;
-		result.push_back(words[minimum_size_end_node->idx]);
-		while (prev != NULL) {
-			result.push_back(words[prev->idx]);
-			prev = prev->prev;
-		}
-		for (vector<string>::reverse_iterator it = result.rbegin(); it != result.rend(); it++) {
-			cout << *it << endl;
-		}
-
-		cout << "processed" << endl;
+    if (min_size == str_number.size()) {
+      cout << "No solution." << endl;
+    } else {
+      Node *prev = minimum_size_end_node;
+      vector<string> result;
+      while (prev != NULL && prev->word != "") {
+        result.push_back(words[prev->idx]);
+        prev = prev->prev;
+      }
+      for (vector<string>::reverse_iterator it = result.rbegin(); it != result.rend(); it++) {
+        cout << *it << endl;
+      }
+    }
 	}
 };
 
