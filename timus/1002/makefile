@@ -4,7 +4,7 @@ BIN=$(subst .cpp,.bin,$(SRC))
 INPUT=input.txt
 TEST_OUTPUT=test_output.txt
 OUTPUT=output.txt
-CFLAGS=-DDEBUG -std=c++11 -Wall -Werror -ggdb
+CFLAGS=-std=c++11 -Wall -Werror -ggdb #-DDEBUG
 LDFLAGS=
 
 all:

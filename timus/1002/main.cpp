@@ -183,7 +183,7 @@ struct Test {
         prev = prev->prev;
       }
       for (vector<string>::reverse_iterator it = result.rbegin(); it != result.rend(); it++) {
-        cout << *it;
+        cout << *it << " ";
       }
       cout << endl;
     }
