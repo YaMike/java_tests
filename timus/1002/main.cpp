@@ -72,13 +72,13 @@ struct Test {
 		struct Node {
 			uint32_t pos;
 			string word;
-			uint32_t word_idx;
+			uint32_t idx;
 			Node *prev;
 			vector<Node*> next;
 			Node(Node *prev, uint32_t pos, string word, uint32_t idx) {
 				this->pos = pos;
 				this->word = word;
-				this->word_idx = idx;
+				this->idx = idx;
 			};
 			~Node() {
 				for (vector<Node*>::iterator it = next.begin(); it != next.end(); ++it) {
@@ -142,7 +142,7 @@ struct Test {
 			if (last_node->pos != str_number.size()) {
 				Node *prev = last_node->prev;
 				while (prev != NULL) {
-					for (list<Node*>::iterator it = prev->next.begin(); it != prev->next.end(); it++) {
+					for (vector<Node*>::iterator it = prev->next.begin(); it != prev->next.end(); it++) {
 						if (*it == last_node) {
 							prev->next.erase(it);
 							break;
@@ -171,11 +171,11 @@ struct Test {
 		}
 	
 		/* print result */
-		cout << "minimum is " << size << endl;
+		cout << "minimum is " << min_size << endl;
 		Node *prev = minimum_size_end_node;
 		vector<string> result;
-		result.push_back(words[minimum_size_end_node->idx];
-		while (prev != null) {
+		result.push_back(words[minimum_size_end_node->idx]);
+		while (prev != NULL) {
 			result.push_back(words[prev->idx]);
 			prev = prev->prev;
 		}
