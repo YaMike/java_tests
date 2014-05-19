@@ -30,13 +30,8 @@ int main(int argc, char *argv[]) {
 	static set<uint32_t> full_bucket_weight;
 
 	struct Node {
-		uint32_t cur_weight;
-		uint32_t tot_weight;
-		vector<Node> childs;
-		Node(uint32_t c, uint32_t t, vector<uint32_t> child_weights) {
 
-			this->cur_weight = c;
-			this->tot_weight = t + c;
+		Node(uint32_t w, vector<uint32_t> child_weights) {
 
 			vector<uint32_t> new_child_weights;
 
@@ -48,17 +43,19 @@ int main(int argc, char *argv[]) {
 					new_child_weights.insert(new_child_weights.end(), it+1, child_weights.end());
 				}
 
-				if (*it + this->tot_weight < total_weigth/2) {
-					this->childs.push_back(Node(*it, this->tot_weight, new_child_weights));
+				if (*it + w < total_weigth/2) {
+					Node(*it + w, new_child_weights);
 				} else {
-					full_bucket_weight.insert(this->tot_weight);
+					full_bucket_weight.insert(w);
 				}
 				new_child_weights.clear();
 			}
 		}
 	};
 
-	Node head(0,0,stones);
+	{
+		Node head(0,stones);
+	}
 	uint32_t min_difference = total_weigth, w1, w2, wd;
 	double diff = 0;
 	for (set<uint32_t>::iterator it = full_bucket_weight.begin(); it != full_bucket_weight.end(); it++) {
