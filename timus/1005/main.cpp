@@ -28,12 +28,13 @@ int main(int argc, char *argv[]) {
 	/*process data */
 	static uint32_t total_weigth = accumulate(stones.begin(), stones.end(), 0);
 	static set<uint32_t> full_bucket_weight;
+	static vector<uint32_t> new_child_weights;
 
 	struct Node {
 
 		Node(uint32_t w, vector<uint32_t> child_weights) {
 
-			vector<uint32_t> new_child_weights;
+			new_child_weights.clear();
 
 			for (vector<uint32_t>::iterator it = child_weights.begin(); it != child_weights.end(); it++) {
 				if (it != child_weights.begin()) {
@@ -53,9 +54,8 @@ int main(int argc, char *argv[]) {
 		}
 	};
 
-	{
-		Node head(0,stones);
-	}
+	Node head(0,stones);
+
 	uint32_t min_difference = total_weigth, w1, w2, wd;
 	double diff = 0;
 	for (set<uint32_t>::iterator it = full_bucket_weight.begin(); it != full_bucket_weight.end(); it++) {
