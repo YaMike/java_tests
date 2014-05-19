@@ -37,12 +37,8 @@ int main(int argc, char *argv[]) {
 			new_child_weights.clear();
 
 			for (vector<uint32_t>::iterator it = child_weights.begin(); it != child_weights.end(); it++) {
-				if (it != child_weights.begin()) {
-					new_child_weights.insert(new_child_weights.end(), child_weights.begin(), it);
-				}
-				if (it != child_weights.end()-1) {
-					new_child_weights.insert(new_child_weights.end(), it+1, child_weights.end());
-				}
+
+				new_child_weights.insert(new_child_weights.end(), it, child_weights.end());
 
 				if (*it + w < total_weigth/2) {
 					Node(*it + w, new_child_weights);
