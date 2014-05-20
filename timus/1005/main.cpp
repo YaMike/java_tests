@@ -26,46 +26,40 @@ int main(int argc, char *argv[]) {
 	}
 
 	/*process data */
-	static uint32_t total_weigth = accumulate(stones.begin(), stones.end(), 0);
-	static set<uint32_t> full_bucket_weight;
+	static uint32_t total_weight = accumulate(stones.begin(), stones.end(), 0);
 	static vector<uint32_t> new_child_weights;
+	new_child_weights.reserve(stones.size());
+
+	static uint32_t min_difference = total_weight, wd;
+	static double diff = 0;
 
 	struct Node {
-
 		Node(uint32_t w, vector<uint32_t> child_weights) {
-
-			new_child_weights.clear();
-
 			for (vector<uint32_t>::iterator it = child_weights.begin(); it != child_weights.end(); it++) {
 
-				new_child_weights.insert(new_child_weights.end(), it, child_weights.end());
+				new_child_weights.clear();
 
-				if (*it + w < total_weigth/2) {
+				if (it != child_weights.begin()) {
+					new_child_weights.insert(new_child_weights.end(), child_weights.begin(), it);
+				}
+				if (it != child_weights.end()-1) {
+					new_child_weights.insert(new_child_weights.end(), it+1, child_weights.end());
+				}
+
+				if (*it + w < total_weight/2) {
 					Node(*it + w, new_child_weights);
 				} else {
-					full_bucket_weight.insert(w);
+					diff = abs(total_weight/2 - w);
+					if (diff < min_difference) {
+						min_difference = diff;
+						wd = total_weight - 2*w;
+					}
 				}
-				new_child_weights.clear();
 			}
 		}
 	};
 
 	Node head(0,stones);
-
-	uint32_t min_difference = total_weigth, w1, w2, wd;
-	double diff = 0;
-	for (set<uint32_t>::iterator it = full_bucket_weight.begin(); it != full_bucket_weight.end(); it++) {
-		diff = abs(total_weigth/2 - *it);
-		if (diff < min_difference) {
-			min_difference = diff;
-			w1 = *it;
-			w2 = total_weigth - *it;
-			wd = w2 - w1;
-		}
-	}
-#ifdef DEBUG
-	cout << "w 1 = " << w1 << ", w 2 = " << w2 << ", wd = ";
-#endif
 	cout << wd << endl;
 	return 0;
 }
