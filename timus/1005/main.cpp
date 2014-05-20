@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 	uint32_t stones_count;
 	uint32_t total_weight = 0;
 
+	stones.reserve(30);
 	/* read input data */
 	cin >> stones_count;
 	for (uint32_t i = 0; i < stones_count; i++) {
@@ -28,17 +29,15 @@ int main(int argc, char *argv[]) {
 	}
 
 	/*process data */
-	static uint32_t selected_stones, i = 0;
+	static uint32_t selected_stones, i = 0, combinations = pow(2,stones_count);
 	static int32_t min_difference = total_weight;
 	static int32_t sum = 0;
 
-	for (selected_stones = 0; selected_stones != pow(2,stones_count); selected_stones++) {
+	for (selected_stones = 0; selected_stones != combinations; selected_stones++) {
 		for (sum =0, i = 0; i < stones_count; i++) {
 			sum += (selected_stones >> i) & 0x1 ? stones[i] : -stones[i];
 		}
-		cout << hex << selected_stones << endl;
 		min_difference = min(abs(sum), min_difference);
-
 	}
 	cout << dec << min_difference << endl;
 	return 0;
