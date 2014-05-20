@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
 
 	vector<uint32_t> stones;
 	uint32_t stones_count;
+	uint32_t total_weight = 0;
 
 	/* read input data */
 	cin >> stones_count;
@@ -23,43 +24,22 @@ int main(int argc, char *argv[]) {
 		uint32_t stone_weight;
 		cin >> stone_weight;
 		stones.push_back(stone_weight);
+		total_weight += stone_weight;
 	}
 
 	/*process data */
-	static uint32_t total_weight = accumulate(stones.begin(), stones.end(), 0);
-	static vector<uint32_t> new_child_weights;
-	new_child_weights.reserve(stones.size());
+	static uint32_t selected_stones, i = 0;
+	static int32_t min_difference = total_weight;
+	static int32_t sum = 0;
 
-	static uint32_t min_difference = total_weight, wd;
-	static double diff = 0;
-
-	struct Node {
-		Node(uint32_t w, vector<uint32_t> child_weights) {
-			for (vector<uint32_t>::iterator it = child_weights.begin(); it != child_weights.end(); it++) {
-
-				new_child_weights.clear();
-
-				if (it != child_weights.begin()) {
-					new_child_weights.insert(new_child_weights.end(), child_weights.begin(), it);
-				}
-				if (it != child_weights.end()-1) {
-					new_child_weights.insert(new_child_weights.end(), it+1, child_weights.end());
-				}
-
-				if (*it + w < total_weight/2) {
-					Node(*it + w, new_child_weights);
-				} else {
-					diff = abs(total_weight/2 - w);
-					if (diff < min_difference) {
-						min_difference = diff;
-						wd = total_weight - 2*w;
-					}
-				}
-			}
+	for (selected_stones = 0; selected_stones != pow(2,stones_count); selected_stones++) {
+		for (sum =0, i = 0; i < stones_count; i++) {
+			sum += (selected_stones >> i) & 0x1 ? stones[i] : -stones[i];
 		}
-	};
+		cout << hex << selected_stones << endl;
+		min_difference = min(abs(sum), min_difference);
 
-	Node head(0,stones);
-	cout << wd << endl;
+	}
+	cout << dec << min_difference << endl;
 	return 0;
 }
