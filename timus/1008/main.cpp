@@ -91,7 +91,6 @@ int main(int argc, char *argv[]) {
 
 	/* transform data to image */
 	uint32_t x_size = max_x + 1, y_size = max_y + 1;
-
 	uint32_t image[x_size*y_size];
 	memset(&image, 0, x_size*y_size*sizeof(uint32_t));
 
@@ -120,7 +119,6 @@ int main(int argc, char *argv[]) {
 		neighbors.pop_front();
 		for (vector<OffPoint>::const_iterator it = offsets.cbegin(); it != offsets.cend(); it++) {
 			uint32_t x = active_point.x+it->x, y = active_point.y+it->y;
-			//cout << "analyze " << it->s << ": [" << x << ", " << y << "]";
 			if (x <= x_size && y <= y_size && image[x+x_size*y] == 1) {
 				neighbors.push_back(Point(active_point.x+it->x, active_point.y + it->y));
 				image[x+x_size*y] = 2;
