@@ -109,10 +109,10 @@ int main(int argc, char *argv[]) {
 	neighbors.push_back(min_point);
 
 	vector<OffPoint> offsets;
-	offsets.push_back(OffPoint("R",1,0));
-	offsets.push_back(OffPoint("T",0,1));
-	offsets.push_back(OffPoint("L",-1,0));
-	offsets.push_back(OffPoint("B",0,-1));
+	offsets.push_back(OffPoint("R", 1, 0));
+	offsets.push_back(OffPoint("T", 0, 1));
+	offsets.push_back(OffPoint("L",-1, 0));
+	offsets.push_back(OffPoint("B", 0,-1));
 
 	while (0 != neighbors.size()) {
 		Point active_point = neighbors.front();
