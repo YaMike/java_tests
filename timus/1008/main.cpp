@@ -126,7 +126,9 @@ int main(int argc, char *argv[]) {
 				result << it->s;
 			}
 		}
-		result << "," << endl;
+		if (neighbors.size() != 0) {
+			result << "," << endl;
+		}
 	}
 	result << ".";
 
