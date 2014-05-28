@@ -61,6 +61,7 @@ struct Test {
   }
 
   void process() {
+		stringstream ss_result;
 #ifdef DEBUG
     cout << "processing: " << number << endl; 
 #endif
@@ -174,7 +175,7 @@ struct Test {
 
     /* print result */
     if (min_size == str_number.size()) {
-      cout << "No solution." << endl;
+      ss_result << "No solution." << endl;
     } else {
       Node *prev = minimum_size_end_node;
       vector<string> result;
@@ -182,11 +183,13 @@ struct Test {
         result.push_back(words[prev->idx]);
         prev = prev->prev;
       }
-      for (vector<string>::reverse_iterator it = result.rbegin(); it != result.rend(); it++) {
-        cout << *it << " ";
+			for (size_t i = result.size(); i-- > 0; ) {
+        ss_result << result[i];
+				if (i != 0) ss_result << " ";
       }
-      cout << endl;
+      ss_result << endl;
     }
+		cout << ss_result.str();
   }
 };
 
