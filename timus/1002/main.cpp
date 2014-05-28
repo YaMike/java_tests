@@ -8,96 +8,94 @@
 
 using namespace std;
 
-static const map<uint8_t, uint8_t> sym2num= {
-  {'i','1'},{'j','1'},
-  {'a','2'},{'b','2'},{'c','2'},
-  {'d','3'},{'e','3'},{'f','3'},
-  {'g','4'},{'h','4'},
-  {'k','5'},{'l','5'},
-  {'m','6'},{'n','6'},
-  {'p','7'},{'r','7'},{'s','7'},
-  {'t','8'},{'u','8'},{'v','8'},
-  {'w','9'},{'x','9'},{'y','9'},
-  {'o','0'},{'q','0'},{'z','0'},
-};
-
-string toNumberString(const string &s) {
-  string r;
-  r.reserve(s.size());
-  for (string::const_iterator it = s.cbegin(); it != s.cend(); ++it) {
-    r.push_back(sym2num.at(*it));
-  }
-  return r;
-}
-
-template <typename T>
-string toString(const T &t) {
-  ostringstream ss;
-  ss << t;
-  return ss.str();
+struct Node {
+	uint32_t pos;
+	string word;
+	uint32_t idx;
+	Node *prev;
+	vector<Node*> next;
+	Node(Node *prev, uint32_t pos, string word, uint32_t idx) {
+		this->pos = pos;
+		this->word = word;
+		this->idx = idx;
+		this->prev = prev;
+	};
+	~Node() {
+		for (vector<Node*>::iterator it = next.begin(); it != next.end(); ++it) {
+			delete *it;
+		}
+	}
 };
 
 struct Test {
   uint64_t number;
   vector<string> words;
+	map<uint8_t,uint8_t> sym2num;
 
   Test(uint64_t number) {
     this->number = number;
     int words_count;
     cin >> words_count;
     words.reserve(words_count);
+
     string str;
     for (int i = 0; i < words_count; ++i) {
       cin >> str;
       words.push_back(str);
     }
-#ifdef DEBUG
-    cout << "test created: \"" << number << "\" ( ";
-    for (vector<string>::iterator it = words.begin(); it != words.end(); ++it) {
-      cout << *it << " ";
-    }
-    cout << ")" << endl;
-#endif
+
+		sym2num.insert(pair<uint8_t,uint8_t>('i','1'));
+		sym2num.insert(pair<uint8_t,uint8_t>('j','1'));
+		sym2num.insert(pair<uint8_t,uint8_t>('a','2'));
+		sym2num.insert(pair<uint8_t,uint8_t>('b','2'));
+		sym2num.insert(pair<uint8_t,uint8_t>('c','2'));
+		sym2num.insert(pair<uint8_t,uint8_t>('d','3'));
+		sym2num.insert(pair<uint8_t,uint8_t>('e','3'));
+		sym2num.insert(pair<uint8_t,uint8_t>('f','3'));
+		sym2num.insert(pair<uint8_t,uint8_t>('g','4'));
+		sym2num.insert(pair<uint8_t,uint8_t>('h','4'));
+		sym2num.insert(pair<uint8_t,uint8_t>('k','5'));
+		sym2num.insert(pair<uint8_t,uint8_t>('l','5'));
+		sym2num.insert(pair<uint8_t,uint8_t>('m','6'));
+		sym2num.insert(pair<uint8_t,uint8_t>('n','6'));
+		sym2num.insert(pair<uint8_t,uint8_t>('p','7'));
+		sym2num.insert(pair<uint8_t,uint8_t>('r','7'));
+		sym2num.insert(pair<uint8_t,uint8_t>('s','7'));
+		sym2num.insert(pair<uint8_t,uint8_t>('t','8'));
+		sym2num.insert(pair<uint8_t,uint8_t>('u','8'));
+		sym2num.insert(pair<uint8_t,uint8_t>('v','8'));
+		sym2num.insert(pair<uint8_t,uint8_t>('w','9'));
+		sym2num.insert(pair<uint8_t,uint8_t>('x','9'));
+		sym2num.insert(pair<uint8_t,uint8_t>('y','9'));
+		sym2num.insert(pair<uint8_t,uint8_t>('o','0'));
+		sym2num.insert(pair<uint8_t,uint8_t>('q','0'));
+		sym2num.insert(pair<uint8_t,uint8_t>('z','0'));
   }
 
-  void process() {
-		stringstream ss_result;
-#ifdef DEBUG
-    cout << "processing: " << number << endl; 
-#endif
-    /* criterea:
-     * - length (exactly words_count syms/nums)
-     * - acceptable chars from mapping sym2num in array
-     * - build multi-tree, each node is a word with vector of child nodes
-     */
-    struct Node {
-      uint32_t pos;
-      string word;
-      uint32_t idx;
-      Node *prev;
-      vector<Node*> next;
-      Node(Node *prev, uint32_t pos, string word, uint32_t idx) {
-        this->pos = pos;
-        this->word = word;
-        this->idx = idx;
-        this->prev = prev;
-      };
-      ~Node() {
-        for (vector<Node*>::iterator it = next.begin(); it != next.end(); ++it) {
-          delete *it;
-        }
-      }
-    };
+	string toNumberString(const string &s) {
+		string r;
+		r.reserve(s.size());
+		for (string::const_iterator it = s.begin(); it != s.end(); ++it) {
+			r.push_back(sym2num.at(*it));
+		}
+		return r;
+	}
 
+	template <typename T>
+		string toString(const T &t) {
+			ostringstream ss;
+			ss << t;
+			return ss.str();
+		};
+
+  void process() {
+		ostringstream ss_result;
     /* convert words to number strings */
     vector<string> words_num;
     words_num.reserve(words.size());
 
     for (vector<string>::iterator it = words.begin(); it != words.end(); it++) {
       words_num.push_back(toNumberString(*it));
-#ifdef DEBUG
-      cout << words_num.back() << ":" << *it << endl;
-#endif
     }
 
     list<Node*> active_nodes;
@@ -107,7 +105,7 @@ struct Test {
     /* initial condition */
     string str_number(toString(number));
     uint32_t idx = 0;
-    for (vector<string>::const_iterator words_it = words_num.cbegin(); words_it != words_num.cend(); words_it++, idx++) {
+    for (vector<string>::const_iterator words_it = words_num.begin(); words_it != words_num.end(); words_it++, idx++) {
       if (words_it->compare(0, words_it->size(), str_number,0,words_it->size()) == 0) {
         Node *node = new Node(&result_head, words_it->size(), *words_it, idx++);
         active_nodes.push_back(node);
@@ -124,7 +122,7 @@ struct Test {
 
       /* add new active nodes */
       idx = 0;
-      for (vector<string>::const_iterator w_it = words_num.cbegin(); w_it != words_num.cend(); w_it++, idx++) {
+      for (vector<string>::const_iterator w_it = words_num.begin(); w_it != words_num.end(); w_it++, idx++) {
         if (w_it->compare(0, w_it->size(), str_number, act_node->pos, w_it->size()) == 0) {
           Node *new_node = new Node(act_node, act_node->pos + w_it->size(), *w_it, idx);
           act_node->next.push_back(new_node);
